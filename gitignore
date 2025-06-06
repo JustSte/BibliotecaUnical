@@ -1,0 +1,22 @@
+
+# Backend - Java / Spring Boot
+target/
+*.class
+*.jar
+*.war
+*.iml
+.idea/
+*.log
+.env
+
+# Frontend - Angular
+node_modules/
+dist/
+.env
+.angular/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
