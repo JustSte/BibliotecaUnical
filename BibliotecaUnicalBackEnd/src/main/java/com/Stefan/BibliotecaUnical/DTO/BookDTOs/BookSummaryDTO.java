@@ -1,12 +1,12 @@
-package com.Stefan.BibliotecaUnical.DTO;
+package com.Stefan.BibliotecaUnical.DTO.BookDTOs;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BookDTO {
+public class BookSummaryDTO {
+
     private Long id;
     private String title;
-    private Long shelfID;
 }

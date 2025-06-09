@@ -1,6 +1,7 @@
 package com.Stefan.BibliotecaUnical.mapper;
 
-import com.Stefan.BibliotecaUnical.DTO.BookDTO;
+import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
+import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
 import com.Stefan.BibliotecaUnical.models.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,6 +19,9 @@ public interface BookMapper {
 
     @Mapping(source = "shelf.id", target = "shelfID")
     BookDTO toDTO(Book book);
+
+    BookSummaryDTO toSummaryDTO(Book book);
+    List<BookSummaryDTO> toSummaryDTOList(List<Book> bookList);
 
     List<Book> toEntityList(List<BookDTO> bookDTOList);
 

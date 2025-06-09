@@ -18,7 +18,8 @@ public class Book {
 
     private String title;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "shelf_id", nullable = true)
     private Shelf shelf;
 
 }
