@@ -2,6 +2,7 @@ package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.CreateShelfDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.ShelfDTO;
+import com.Stefan.BibliotecaUnical.Helpers.AddBooksToShelf;
 import com.Stefan.BibliotecaUnical.request.AddBookRequest;
 import com.Stefan.BibliotecaUnical.service.ShelfService;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ShelfController {
 
     private final ShelfService shelfService;
+    private final AddBooksToShelf addBooksToShelf;
 
     @GetMapping
     public ResponseEntity<List<ShelfDTO>> getAllShelves()
@@ -34,7 +36,7 @@ public class ShelfController {
     @PostMapping("/addBooks")
     public ResponseEntity<ShelfDTO> addBooksToShelf(@Valid @RequestBody AddBookRequest request)
     {
-        return new ResponseEntity<>(shelfService.addBooksToShelf(request.getShelfId(), request.getBookList()), HttpStatus.OK);
+        return new ResponseEntity<>(addBooksToShelf.addBooksToShelf(request.getShelfId(), request.getBookList()), HttpStatus.OK);
     }
 
 }
