@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class Book {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title;

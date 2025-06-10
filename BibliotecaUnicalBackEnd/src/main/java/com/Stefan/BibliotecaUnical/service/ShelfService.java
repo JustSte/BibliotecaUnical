@@ -63,4 +63,16 @@ public class ShelfService {
         return saveShelf(shelfDTO);
     }
 
+    public void deleteShelf(Long id)
+    {
+        if(shelfRepository.existsById(id))
+        {
+            shelfRepository.deleteById(id);
+        }
+        else
+        {
+            throw new RuntimeException("Shelf with ID: " + id + " not found.");
+        }
+    }
+
 }

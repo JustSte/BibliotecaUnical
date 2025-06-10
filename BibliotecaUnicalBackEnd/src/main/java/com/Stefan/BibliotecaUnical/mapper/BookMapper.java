@@ -20,9 +20,11 @@ public interface BookMapper {
     Book toEntity(BookDTO bookDTO);
 
     @Mapping(source = "shelf.id", target = "shelfID")
+    @Mapping(source = "shelf.location", target = "shelfLocation")
     BookDTO toDTO(Book book);
 
     BookSummaryDTO toSummaryDTO(Book book);
+    BookSummaryDTO toSummaryDTOFromDTO(BookDTO bookDTO);
     BookDTO toDTOFromSummary(BookSummaryDTO bookSummaryDTO);
     List<BookSummaryDTO> toSummaryDTOList(List<Book> bookList);
 

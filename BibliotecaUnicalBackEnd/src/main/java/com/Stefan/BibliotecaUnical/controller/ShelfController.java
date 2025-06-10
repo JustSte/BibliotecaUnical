@@ -39,4 +39,10 @@ public class ShelfController {
         return new ResponseEntity<>(addBooksToShelf.addBooksToShelf(request.getShelfId(), request.getBookList()), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteShelf(@PathVariable Long id)
+    {
+        shelfService.deleteShelf(id);
+        return new ResponseEntity<>(("Shelf with id: " + id + " successfully deleted."), HttpStatus.OK);
+    }
 }
