@@ -1,5 +1,6 @@
 package com.Stefan.BibliotecaUnical.controller;
 
+import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.CreateShelfDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.ShelfDTO;
 import com.Stefan.BibliotecaUnical.Helpers.AddBooksToShelf;
@@ -25,6 +26,18 @@ public class ShelfController {
     public ResponseEntity<List<ShelfDTO>> getAllShelves()
     {
         return new ResponseEntity<>(shelfService.getAllShelves(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ShelfDTO> getShelfById(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(shelfService.getShelfById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/booksOfShelf/{id}")
+    public ResponseEntity<List<BookSummaryDTO>> getBooksOfShelf(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(shelfService.getBooksOfShelf(id), HttpStatus.OK);
     }
 
     @PostMapping()

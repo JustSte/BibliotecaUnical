@@ -14,7 +14,6 @@ import java.util.List;
 @Component
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    BookMapper INSTANCE = Mappers.getMapper(BookMapper.class);
 
     @Mapping(target = "shelf", expression = "java(mapShelfFromId(bookDTO.getShelfID()))")
     Book toEntity(BookDTO bookDTO);
