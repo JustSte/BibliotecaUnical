@@ -1,8 +1,6 @@
 package com.Stefan.BibliotecaUnical.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -12,7 +10,7 @@ import lombok.*;
 @ToString
 @RequiredArgsConstructor
 @Entity
-public class User {
+public class Users {
 
     public static enum Role{
         ROLE_ADMIN, ROLE_MANAGER, ROLE_BASE_USER,ROLE_GUEST
@@ -39,6 +37,9 @@ public class User {
 
     @NotBlank
     private int studentID;
+
+/*    @OneToOne(mappedBy = "occupant")
+    private Chair chair;*/
     Role role= Role.ROLE_GUEST;
 
 }

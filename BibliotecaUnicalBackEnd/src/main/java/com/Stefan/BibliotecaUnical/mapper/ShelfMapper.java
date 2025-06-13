@@ -14,8 +14,6 @@ import java.util.Optional;
 @Mapper(componentModel = "spring", uses = BookMapper.class)
 public interface ShelfMapper {
 
-    ShelfMapper INSTANCE = Mappers.getMapper(ShelfMapper.class);
-
     Shelf toEntity(ShelfDTO shelfDTO);
     ShelfDTO toDTO(Shelf shelf);
 

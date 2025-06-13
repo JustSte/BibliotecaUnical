@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ModifyTableRequest {
-
-    private String name;
+public class CreateTableWithChairsRequest {
+    private Long id;
 }
