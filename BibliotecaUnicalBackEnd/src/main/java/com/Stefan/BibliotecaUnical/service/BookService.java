@@ -37,9 +37,10 @@ public class BookService {
     @Transactional
     public BookDTO saveBook(BookDTO bookDTO)
     {
-        log.info("The book is being saved.");
+
         Book book = bookMapper.toEntity(bookDTO);
         BookDTO saved = bookMapper.toDTO(bookRepository.save(book));
+        log.info("Saved book with id: {}.", saved.getId());
         return saved;
     }
 

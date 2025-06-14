@@ -1,13 +1,13 @@
 package com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class LibraryTableDTO {
 
     private Long id;
