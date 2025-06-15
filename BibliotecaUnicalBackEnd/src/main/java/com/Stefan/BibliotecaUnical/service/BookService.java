@@ -19,8 +19,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -72,7 +70,7 @@ public class BookService {
         }
         else
         {
-            throw new RuntimeException("Book with ID: " + id + " not found.");
+            throw new ResourceNotFoundException("Book with ID: " + id + " not found.");
         }
     }
 
