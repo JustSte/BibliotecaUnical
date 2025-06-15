@@ -8,6 +8,12 @@ import com.Stefan.BibliotecaUnical.repository.LibraryTableRepository;
 import com.Stefan.BibliotecaUnical.request.ModifyTableRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +28,15 @@ public class LibraryTableService {
     private final LibraryTableMapper libraryTableMapper;
     private final LibraryTableRepository libraryTableRepository;
 
-    public List<LibraryTableDTO> getAllTables()
+    public Page<LibraryTableDTO> getAllTables(int page, int size)
     {
-        List<LibraryTableDTO> libraryTableDTOList = libraryTableMapper.toDTOList(libraryTableRepository.findAll());
-        return libraryTableDTOList;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<LibraryTable> libraryTablePage = libraryTableRepository.findAll(pageable);
+        Page<LibraryTableDTO> result = libraryTablePage.map(libraryTable -> libraryTableMapper.toDTO(libraryTable));
+        return result;
     }
 
+    @Cacheable(value = "libraryTable", key = "#id")
     public LibraryTableDTO getTableById(Long id)
     {
         LibraryTable libraryTable = libraryTableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No libraryTable with id: " + id + " found."));
@@ -47,6 +56,7 @@ public class LibraryTableService {
     }
 
     @Transactional
+    @CachePut(value = "libraryTable", key = "#result.id")
     public LibraryTableDTO saveTable(LibraryTableDTO libraryTableDTO)
     {
         log.info("LibraryTable {} is being saved.", libraryTableDTO.getId());
@@ -55,6 +65,7 @@ public class LibraryTableService {
         return saved;
     }
 
+    @CachePut(value = "libraryTable", key = "#result.id")
     public LibraryTableDTO updateTable(ModifyTableRequest request, Long id)
     {
         log.info("LibraryTable {} is being modified.", id);
@@ -64,6 +75,7 @@ public class LibraryTableService {
         return saved;
     }
 
+    @CacheEvict(value = "libraryTable", key = "#id")
     public void deleteTable(Long id)
     {
         log.info("LibraryTable {} is being deleted.", id);

@@ -9,6 +9,7 @@ import com.Stefan.BibliotecaUnical.request.ModifyTableRequest;
 import com.Stefan.BibliotecaUnical.service.LibraryTableService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,11 @@ public class LibraryTableController {
     private final AddChairsToTable addChairsToTable;
 
     @GetMapping()
-    public ResponseEntity<List<LibraryTableDTO>> getAllTables()
+    public ResponseEntity<Page<LibraryTableDTO>> getAllTables(@RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "8") int size)
     {
-        return new ResponseEntity<>(libraryTableService.getAllTables(), HttpStatus.OK);
+
+        return new ResponseEntity<>(libraryTableService.getAllTables(page,size), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
