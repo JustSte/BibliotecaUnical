@@ -2,6 +2,7 @@ package com.Stefan.BibliotecaUnical.mapper;
 
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
+import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.BookFlatDTO;
 import com.Stefan.BibliotecaUnical.models.Book;
 import com.Stefan.BibliotecaUnical.models.Shelf;
 import org.mapstruct.Mapper;
@@ -28,8 +29,12 @@ public interface BookMapper {
     List<BookSummaryDTO> toSummaryDTOList(List<Book> bookList);
 
     List<Book> toEntityList(List<BookDTO> bookDTOList);
-
     List<BookDTO> toDtoList(List<Book> bookList);
+
+
+    Book toEntityFromFlat(BookFlatDTO bookFlatDTO);
+    @Mapping(source = "shelf.id", target = "shelfId")
+    BookFlatDTO toFlatFromEntity(Book book);
 
     default Shelf mapShelfFromId(Long shelfId)
     {

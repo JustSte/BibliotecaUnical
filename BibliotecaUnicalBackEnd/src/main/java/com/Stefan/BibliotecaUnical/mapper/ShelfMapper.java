@@ -1,9 +1,11 @@
 package com.Stefan.BibliotecaUnical.mapper;
 
+import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ShelfFlatDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.CreateShelfDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.ShelfDTO;
 import com.Stefan.BibliotecaUnical.models.Shelf;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
@@ -23,4 +25,9 @@ public interface ShelfMapper {
 
     List<ShelfDTO> toDtoList(List<Shelf> shelfList);
     List<Shelf> toEntityList(List<ShelfDTO> shelfDTOList);
+
+    Shelf toEntityFromFlat(ShelfFlatDTO shelfFlatDTO);
+
+    @Mapping(source="books", target = "books")
+    ShelfFlatDTO toFlatFromEntity(Shelf shelf);
 }

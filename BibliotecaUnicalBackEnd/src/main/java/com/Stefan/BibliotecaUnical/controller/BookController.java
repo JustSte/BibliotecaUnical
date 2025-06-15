@@ -2,10 +2,13 @@ package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
+import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.BookFlatDTO;
 import com.Stefan.BibliotecaUnical.request.ModifyBookRequest;
 import com.Stefan.BibliotecaUnical.service.BookService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +23,33 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> getAllBooks()
+    public ResponseEntity<Page<BookFlatDTO>> getAllBooks(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "15") int size)
     {
-        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+        Page<BookFlatDTO> booksPage = bookService.getAllBooks(page, size);
+        return ResponseEntity.ok(booksPage);
     }
 
     @GetMapping("/withoutShelf")
-    public ResponseEntity<List<BookSummaryDTO>> getAllBooksWithoutShelf()
+    public ResponseEntity<Page<BookSummaryDTO>> getAllBooksWithoutShelf(@RequestParam(defaultValue = "0") int page,
+                                                                        @RequestParam(defaultValue = "15") int size)
     {
-        return new ResponseEntity<>(bookService.getAllBooksWithoutShelf(), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.getAllBooksWithoutShelf(page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookFlatDTO> getBookById(@PathVariable @NotNull Long id)
+    {
+        BookFlatDTO bookFlatDTO = bookService.getBookById(id);
+        return ResponseEntity.ok(bookFlatDTO);
+    }
+
+    @GetMapping("/ofShelf/{id}")
+    public ResponseEntity<Page<BookSummaryDTO>> getBooksOfShelf(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "15") int size,
+                                                                @PathVariable @NotNull Long id) {
+        Page<BookSummaryDTO> bookSummaryDTOPage = bookService.getBooksOfShelf(id, page, size);
+        return ResponseEntity.ok(bookSummaryDTOPage);
     }
 
     @PostMapping

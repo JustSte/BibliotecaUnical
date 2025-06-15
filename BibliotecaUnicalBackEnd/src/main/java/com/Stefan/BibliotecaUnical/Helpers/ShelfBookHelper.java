@@ -11,6 +11,7 @@ import com.Stefan.BibliotecaUnical.service.BookService;
 import com.Stefan.BibliotecaUnical.service.ShelfService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @Service
-public class AddBooksToShelf {
+public class ShelfBookHelper {
 
     private final ShelfMapper shelfMapper;
     private final BookMapper bookMapper;
@@ -47,5 +48,7 @@ public class AddBooksToShelf {
         }
         return shelfService.saveShelf(shelfDTO);
     }
+
+
 
 }
