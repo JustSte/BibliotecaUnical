@@ -3,7 +3,7 @@ package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
 import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
-import com.Stefan.BibliotecaUnical.Helpers.AddChairsToTable;
+import com.Stefan.BibliotecaUnical.Helpers.TableChairHelper;
 import com.Stefan.BibliotecaUnical.request.AddChairRequest;
 import com.Stefan.BibliotecaUnical.request.ModifyTableRequest;
 import com.Stefan.BibliotecaUnical.service.LibraryTableService;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/libraryTable")
+@RequestMapping("/api/libraryTable")
 @RequiredArgsConstructor
 public class LibraryTableController {
     private final LibraryTableService libraryTableService;
-    private final AddChairsToTable addChairsToTable;
+    private final TableChairHelper tableChairHelper;
 
     @GetMapping()
     public ResponseEntity<Page<LibraryTableDTO>> getAllTables(@RequestParam(defaultValue = "0") int page,
@@ -52,7 +52,7 @@ public class LibraryTableController {
     @PostMapping("/addChairs")
     public ResponseEntity<LibraryTableDTO> addChairToTable(@RequestBody AddChairRequest addChairRequest)
     {
-        return new ResponseEntity<>((addChairsToTable.addChairsToTable(addChairRequest.getLibraryTableId(), addChairRequest.getChairList())), HttpStatus.OK);
+        return new ResponseEntity<>((tableChairHelper.addChairsToTable(addChairRequest.getLibraryTableId(), addChairRequest.getChairList())), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -66,5 +66,12 @@ public class LibraryTableController {
     {
         libraryTableService.deleteTable(id);
         return new ResponseEntity<>(("Table with id: " + id + " successfully deleted."), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/chairs/{id}")
+    public ResponseEntity<String> deleteChairsOfTable(@PathVariable @NotNull Long id)
+    {
+        tableChairHelper.deleteChairsOfTable(id);
+        return new ResponseEntity<>(("Chairs of table: " + id + " deleted successfully"), HttpStatus.OK);
     }
 }

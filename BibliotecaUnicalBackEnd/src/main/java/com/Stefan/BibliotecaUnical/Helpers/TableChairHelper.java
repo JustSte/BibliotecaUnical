@@ -11,22 +11,35 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
 @Service
-public class AddChairsToTable {
+public class TableChairHelper {
 
     private final LibraryTableService libraryTableService;
     private final ChairService chairService;
     private final ChairMapper chairMapper;
 
     @Transactional
+    public List<ChairSummaryDTO> generateChairsForTable()
+    {
+        List<ChairSummaryDTO> chairSummaryDTOList = new ArrayList<>();
+        for(int i = 0; i<8;i++)
+        {
+            ChairDTO chairDTO = chairService.saveChair(new ChairDTO());
+            chairSummaryDTOList.add(chairMapper.toChairSummaryDTOFromDTO(chairDTO));
+        }
+        return chairSummaryDTOList;
+    }
+
+    @Transactional
     public LibraryTableDTO addChairsToTable(Long id, List<Long> chairIds)
     {
         LibraryTableDTO libraryTableDTO = libraryTableService.getTableById(id);
-        List<ChairSummaryDTO> chairsToAdd = chairService.generateChairsForTable();
+        List<ChairSummaryDTO> chairsToAdd = generateChairsForTable();
 
         for(ChairSummaryDTO chair : chairsToAdd)
         {
@@ -37,5 +50,17 @@ public class AddChairsToTable {
             chairService.saveChair(chairDTO);
         }
         return libraryTableService.saveTable(libraryTableDTO);
+    }
+
+    @Transactional
+    public void deleteChairsOfTable(Long id)
+    {
+        log.info("Deleting chairs of table {}.", id);
+        LibraryTableDTO tableDTO = libraryTableService.getTableById(id);
+        List<ChairSummaryDTO> chairSummaryDTO = tableDTO.getChairs();
+        for(ChairSummaryDTO chair : chairSummaryDTO)
+        {
+            chairService.deleteChair(chair.getId());
+        }
     }
 }

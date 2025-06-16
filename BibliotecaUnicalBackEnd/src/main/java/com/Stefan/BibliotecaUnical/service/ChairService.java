@@ -44,17 +44,6 @@ public class ChairService {
         return result;
     }
 
-    @Transactional
-    public List<ChairSummaryDTO> generateChairsForTable()
-    {
-        List<ChairSummaryDTO> chairSummaryDTOList = new ArrayList<>();
-        for(int i = 0; i<8;i++)
-        {
-            ChairDTO chairDTO = saveChair(new ChairDTO());
-            chairSummaryDTOList.add(chairMapper.toChairSummaryDTOFromDTO(chairDTO));
-        }
-        return chairSummaryDTOList;
-    }
 
     @Transactional
     @CachePut(value = "chairs", key="#result.id")
