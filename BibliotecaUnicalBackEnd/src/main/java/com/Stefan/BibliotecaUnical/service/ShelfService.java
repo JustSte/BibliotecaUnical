@@ -38,11 +38,12 @@ public class ShelfService {
     }
 
     @Cacheable(value = "shelf", key = "#id")
-    public ShelfFlatDTO getShelfById(Long id)
+    public ShelfDTO getShelfById(Long id)
     {
        Shelf shelf =  shelfRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No shelf with id: " + id + " found."));
-       ShelfFlatDTO shelfFlatDTO = shelfMapper.toFlatFromEntity(shelf);
-       return shelfFlatDTO;
+       ShelfDTO shelfDTO = shelfMapper.toDTO(shelf);
+       log.info("Returned class: {} " , shelf.getClass());
+       return shelfDTO;
     }
 
     @Transactional

@@ -3,6 +3,8 @@ package com.Stefan.BibliotecaUnical.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -14,7 +16,12 @@ public class Locker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private boolean occupied;
-    private String location;
+    private LocalDateTime occupiedUntil;
+    @Column(nullable = false)
+    private int positionX;
+    @Column(nullable = false)
+    private int positionY;
 
 }

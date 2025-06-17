@@ -2,7 +2,6 @@ package com.Stefan.BibliotecaUnical.mapper;
 
 import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LibraryTableFlatDTO;
 import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
-import com.Stefan.BibliotecaUnical.models.Chair;
 import com.Stefan.BibliotecaUnical.models.LibraryTable;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
@@ -22,14 +21,6 @@ public interface LibraryTableMapper {
     LibraryTable toEntityFromFlat(LibraryTableFlatDTO tableFlatDTO);
     LibraryTableFlatDTO toFlatFromEntity(LibraryTable libraryTable);
 
-/*
-    default Chair mapToChairFromId(Long chairId)
-    {
-        if(chairId == null) return null;
-        Chair chair = new Chair();
-        chair.setId(chairId);
-        return chair;
-    }
-*/
+    List<LibraryTableFlatDTO> toFlatDTOListFromEntity(List<LibraryTable> libraryTableList);
 
 }

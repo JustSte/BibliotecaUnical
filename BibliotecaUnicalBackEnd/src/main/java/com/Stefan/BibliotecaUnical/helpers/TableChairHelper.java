@@ -1,4 +1,4 @@
-package com.Stefan.BibliotecaUnical.Helpers;
+package com.Stefan.BibliotecaUnical.helpers;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
@@ -36,7 +36,7 @@ public class TableChairHelper {
     }
 
     @Transactional
-    public LibraryTableDTO addChairsToTable(Long id, List<Long> chairIds)
+    public LibraryTableDTO addChairsToTable(Long id)
     {
         LibraryTableDTO libraryTableDTO = libraryTableService.getTableById(id);
         List<ChairSummaryDTO> chairsToAdd = generateChairsForTable();

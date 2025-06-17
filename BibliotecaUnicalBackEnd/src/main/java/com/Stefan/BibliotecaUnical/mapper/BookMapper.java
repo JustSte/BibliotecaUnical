@@ -18,7 +18,6 @@ public interface BookMapper {
 
     @Mapping(target = "shelf", expression = "java(mapShelfFromId(bookDTO.getShelfID()))")
     Book toEntity(BookDTO bookDTO);
-
     @Mapping(source = "shelf.id", target = "shelfID")
     @Mapping(source = "shelf.location", target = "shelfLocation")
     BookDTO toDTO(Book book);
@@ -29,7 +28,7 @@ public interface BookMapper {
     List<BookSummaryDTO> toSummaryDTOList(List<Book> bookList);
 
     List<Book> toEntityList(List<BookDTO> bookDTOList);
-    List<BookDTO> toDtoList(List<Book> bookList);
+    List<BookDTO> toDTOList(List<Book> bookList);
 
 
     Book toEntityFromFlat(BookFlatDTO bookFlatDTO);
@@ -43,4 +42,5 @@ public interface BookMapper {
         shelf.setId(shelfId);
         return shelf;
     }
+
 }

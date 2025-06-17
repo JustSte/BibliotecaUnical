@@ -1,11 +1,10 @@
 package com.Stefan.BibliotecaUnical.service;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
-import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ChairFlatDTO;
 import com.Stefan.BibliotecaUnical.mapper.ChairMapper;
 import com.Stefan.BibliotecaUnical.models.Chair;
 import com.Stefan.BibliotecaUnical.repository.ChairRepository;
+import com.Stefan.BibliotecaUnical.request.ModifyChairRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,7 +17,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,10 +28,10 @@ public class ChairService {
     private final ChairMapper chairMapper;
 
     @Cacheable(value = "chairs", key = "#id")
-    public ChairFlatDTO getChairById(Long id)
+    public ChairDTO getChairById(Long id)
     {
-        ChairFlatDTO chairFlatDTO = chairMapper.toFlatfromEntity(chairRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Chair with id: " + id + " not found!")));
-        return chairFlatDTO;
+        ChairDTO chairDTO = chairMapper.toDTO(chairRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Chair with id: " + id + " not found!")));
+        return chairDTO;
     }
 
     public Page<ChairDTO> getAllChairs(int page, int size)
@@ -55,6 +53,16 @@ public class ChairService {
         return saved;
     }
 
+    public ChairDTO updateChair(Long id, ModifyChairRequest request)
+    {
+        ChairDTO chairToModify = getChairById(id);
+        chairToModify.setOccupied(request.isOccupied());
+        chairToModify.setPositionX(request.getPositionX());
+        chairToModify.setPositionY(request.getPositionY());
+        ChairDTO saved = saveChair(chairToModify);
+        return saved;
+    }
+
     @Transactional
     @CacheEvict(value = "chairs", key="#id")
     public void deleteChair(Long id)
@@ -67,5 +75,11 @@ public class ChairService {
         {
             throw new ResourceNotFoundException("Chair with id: " + id + " not found.");
         }
+    }
+
+    public List<ChairDTO> getAllChairsList()
+    {
+        List<ChairDTO> chairDTOList = chairMapper.toDTOList(chairRepository.findAll());
+        return chairDTOList;
     }
 }

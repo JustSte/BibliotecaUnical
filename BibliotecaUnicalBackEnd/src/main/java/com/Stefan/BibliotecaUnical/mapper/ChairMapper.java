@@ -20,8 +20,8 @@ public interface ChairMapper {
 
     @Mapping( source = "libraryTable.id", target = "tableId")
     ChairDTO toDTO(Chair chair);
-
     ChairDTO toDTOFromSummaryDTO(ChairSummaryDTO chairSummaryDTO);
+    ChairDTO toDTOFromFlat(ChairFlatDTO chairFlatDTO);
 
     ChairSummaryDTO toChairSummaryDTOFromDTO(ChairDTO chairDTO);
     ChairSummaryDTO toChairSummaryDTOFromEntity(Chair chair);
@@ -29,11 +29,11 @@ public interface ChairMapper {
     List<ChairSummaryDTO> toChairSummaryDTOListFromDTO(List<ChairDTO> chairList);
 
     @Mapping(source="libraryTable.id", target = "libraryTableId")
-    ChairFlatDTO toFlatfromEntity(Chair chair);
+    ChairFlatDTO toFlatFromEntity(Chair chair);
     Chair toEntityFromFlat(ChairFlatDTO chairFlatDTO);
 
     List<Chair> toEntityList(List<ChairDTO> chairDTOList);
-    List<ChairDTO> toDtoList(List<Chair> chairList);
+    List<ChairDTO> toDTOList(List<Chair> chairList);
 
     default LibraryTable mapTableFromId(Long tableId)
     {

@@ -12,6 +12,7 @@ public class LibraryTableDTO {
 
     private Long id;
     private String name;
-    private String location;
+    private int positionX;
+    private int positionY;
     List<ChairSummaryDTO> chairs;
 }

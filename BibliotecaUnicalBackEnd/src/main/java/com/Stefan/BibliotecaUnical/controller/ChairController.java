@@ -18,7 +18,7 @@ public class ChairController {
     private final ChairService chairService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChairFlatDTO> getChairById(@PathVariable @NotNull Long id)
+    public ResponseEntity<ChairDTO> getChairById(@PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(chairService.getChairById(id), HttpStatus.OK);
     }

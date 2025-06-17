@@ -3,7 +3,7 @@ package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
 import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
-import com.Stefan.BibliotecaUnical.Helpers.TableChairHelper;
+import com.Stefan.BibliotecaUnical.helpers.TableChairHelper;
 import com.Stefan.BibliotecaUnical.request.AddChairRequest;
 import com.Stefan.BibliotecaUnical.request.ModifyTableRequest;
 import com.Stefan.BibliotecaUnical.service.LibraryTableService;
@@ -52,7 +52,7 @@ public class LibraryTableController {
     @PostMapping("/addChairs")
     public ResponseEntity<LibraryTableDTO> addChairToTable(@RequestBody AddChairRequest addChairRequest)
     {
-        return new ResponseEntity<>((tableChairHelper.addChairsToTable(addChairRequest.getLibraryTableId(), addChairRequest.getChairList())), HttpStatus.OK);
+        return new ResponseEntity<>((tableChairHelper.addChairsToTable(addChairRequest.getLibraryTableId())), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

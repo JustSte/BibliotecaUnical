@@ -21,5 +21,7 @@ public interface LockerMapper {
 
     Locker toEntityFromFlat(LockerFlatDTO lockerFlatDTO);
     LockerFlatDTO toFlatFromEntity(Locker locker);
+    List<LockerFlatDTO> toFlatListFromEntity(List<Locker> lockerList);
+
 
 }

@@ -1,6 +1,7 @@
 package com.Stefan.BibliotecaUnical.service;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
+import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LibraryTableFlatDTO;
 import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
 import com.Stefan.BibliotecaUnical.mapper.LibraryTableMapper;
 import com.Stefan.BibliotecaUnical.models.LibraryTable;
@@ -36,6 +37,12 @@ public class LibraryTableService {
         return result;
     }
 
+    public List<LibraryTableFlatDTO> getAllTablesList()
+    {
+        List<LibraryTableFlatDTO> tableDTOList = libraryTableMapper.toFlatDTOListFromEntity(libraryTableRepository.findAll());
+        return tableDTOList;
+    }
+
     @Cacheable(value = "libraryTable", key = "#id")
     public LibraryTableDTO getTableById(Long id)
     {
@@ -50,10 +57,6 @@ public class LibraryTableService {
         return chairSummaryDTOList;
     }
 
-    public Boolean reserveSeat()
-    {
-        return null;
-    }
 
     @Transactional
     @CachePut(value = "libraryTable", key = "#result.id")
@@ -71,6 +74,8 @@ public class LibraryTableService {
         log.info("LibraryTable {} is being modified.", id);
         LibraryTableDTO tableToModify = getTableById(id);
         tableToModify.setName(request.getName());
+        tableToModify.setPositionX(request.getPositionX());
+        tableToModify.setPositionY(request.getPositionY());
         LibraryTableDTO saved = saveTable(tableToModify);
         return saved;
     }

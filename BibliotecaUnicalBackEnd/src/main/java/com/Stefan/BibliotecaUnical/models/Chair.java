@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -18,7 +20,15 @@ public class Chair {
     @SequenceGenerator(name = "chairSeqGen", sequenceName = "chair_sequence", allocationSize = 8)
     private Long id;
 
-    private boolean reserved;
+    @Column(nullable = false)
+    private boolean occupied;
+    private LocalDateTime occupiedUntil;
+
+    @Column(nullable = false)
+    private int positionX;
+    @Column(nullable = false)
+    private int positionY;
+
 
     @ManyToOne
     @JoinColumn(name = "libraryTable_id")

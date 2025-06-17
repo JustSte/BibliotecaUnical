@@ -38,10 +38,10 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookFlatDTO> getBookById(@PathVariable @NotNull Long id)
+    public ResponseEntity<BookDTO> getBookById(@PathVariable @NotNull Long id)
     {
-        BookFlatDTO bookFlatDTO = bookService.getBookById(id);
-        return ResponseEntity.ok(bookFlatDTO);
+        BookDTO bookDTO = bookService.getBookById(id);
+        return ResponseEntity.ok(bookDTO);
     }
 
     @GetMapping("/ofShelf/{id}")
@@ -58,10 +58,10 @@ public class BookController {
         return new ResponseEntity<>(bookService.saveBook(bookDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping()
-    public ResponseEntity<BookSummaryDTO> updateBook(@Valid @RequestBody ModifyBookRequest request)
+    @PutMapping("/{id}")
+    public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @Valid @RequestBody ModifyBookRequest request)
     {
-        return new ResponseEntity<>(bookService.updateBook(request), HttpStatus.OK);
+        return new ResponseEntity<>(bookService.updateBook(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

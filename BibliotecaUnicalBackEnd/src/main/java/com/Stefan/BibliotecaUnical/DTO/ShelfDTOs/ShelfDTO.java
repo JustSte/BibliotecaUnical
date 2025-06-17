@@ -1,6 +1,6 @@
 package com.Stefan.BibliotecaUnical.DTO.ShelfDTOs;
 
-import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
+import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +13,5 @@ public class ShelfDTO {
     private Long id;
     private int size;
     private String location;
-    private List<BookSummaryDTO> books;
+    private List<BookDTO> books;
 }

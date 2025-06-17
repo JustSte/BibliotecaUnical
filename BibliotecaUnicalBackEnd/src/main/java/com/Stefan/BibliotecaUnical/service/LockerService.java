@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,10 +36,10 @@ public class LockerService {
     }
 
     @Cacheable(value = "locker", key="#id")
-    public LockerFlatDTO getLockerById(Long id)
+    public LockerDTO getLockerById(Long id)
     {
-        LockerFlatDTO lockerFlatDTO = lockerMapper.toFlatFromEntity(lockerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found.")));
-        return lockerFlatDTO;
+        LockerDTO lockerDTO = lockerMapper.toDTO(lockerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found.")));
+        return lockerDTO;
     }
 
     @CachePut(value = "locker", key = "#result.id")
@@ -49,12 +51,19 @@ public class LockerService {
         return saved;
     }
 
+    public List<LockerDTO> getAllLockersList()
+    {
+        List<LockerDTO> lockerDTOList = lockerMapper.toDTOList(lockerRepository.findAll());
+        return lockerDTOList;
+    }
+
     @CachePut(value = "locker", key = "#result.id")
     public LockerDTO updateLocker(ModifyLockerRequest request)
     {
-        LockerDTO lockerToModify = lockerMapper.toDTOFromFlat(getLockerById(request.getLockerId()));
+        LockerDTO lockerToModify = getLockerById(request.getLockerId());
         lockerToModify.setOccupied(request.isOccupied());
-        lockerToModify.setLocation(request.getLocation());
+        lockerToModify.setPositionX(request.getPositionX());
+        lockerToModify.setPositionY(request.getPositionY());
         LockerDTO modified = saveLocker(lockerToModify);
         return modified;
 

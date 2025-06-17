@@ -19,6 +19,8 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -44,14 +46,14 @@ public class BookService {
     }
 
     @Cacheable(value = "book", key = "#id")
-    public BookFlatDTO getBookById(Long id)
+    public BookDTO getBookById(Long id)
     {
         Book book = bookRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No book with id: " + id + " found."));
-        BookFlatDTO bookFlatDTO = bookMapper.toFlatFromEntity(book);
-        return bookFlatDTO;
+        BookDTO bookDTO = bookMapper.toDTO(book);
+        return bookDTO;
     }
 
-    @CachePut(value = "book", key = "@result.id")
+    @CachePut(value = "book", key = "#result.id")
     @Transactional
     public BookDTO saveBook(BookDTO bookDTO)
     {
@@ -82,15 +84,20 @@ public class BookService {
         return result;
     }
 
-    @CachePut(value = "book", key ="#request.bookId")
-    public BookSummaryDTO updateBook(ModifyBookRequest request)
+    @CachePut(value = "book", key ="#bookId")
+    public BookDTO updateBook(Long bookId, ModifyBookRequest request)
     {
-        Book bookToModify = bookRepository.findById(request.getBookId()).orElseThrow(() -> new ResourceNotFoundException("Shelf not found"));
+        Book bookToModify = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Shelf not found"));
         BookDTO book = bookMapper.toDTO(bookToModify);
         book.setTitle(request.getTitle());
-        BookSummaryDTO updatedBook = bookMapper.toSummaryDTOFromDTO(saveBook(book));
+        BookDTO updatedBook = saveBook(book);
         return updatedBook;
 
     }
 
+    public List<BookDTO> getAllBooksList(List<Long> bookIds)
+    {
+        List<BookDTO> bookDTOList = bookMapper.toDTOList(bookRepository.findAllById(bookIds));
+        return bookDTOList;
+    }
 }

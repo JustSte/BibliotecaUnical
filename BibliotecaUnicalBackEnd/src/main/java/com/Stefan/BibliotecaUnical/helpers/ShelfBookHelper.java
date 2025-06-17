@@ -1,4 +1,4 @@
-package com.Stefan.BibliotecaUnical.Helpers;
+package com.Stefan.BibliotecaUnical.helpers;
 
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
@@ -11,9 +11,10 @@ import com.Stefan.BibliotecaUnical.service.BookService;
 import com.Stefan.BibliotecaUnical.service.ShelfService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,21 +30,40 @@ public class ShelfBookHelper {
     private final ShelfService shelfService;
     private final BookService bookService;
 
+    @CachePut(value = "shelf", key = "#id")
     public ShelfDTO addBooksToShelf(Long id , List<Long> bookList)
     {
-        ShelfDTO shelfDTO = shelfMapper.toDTO(shelfRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Shelf not found")));
+        ShelfDTO shelfDTO = shelfService.getShelfById(id);
+        List<BookDTO> booksToAdd = bookService.getAllBooksList(bookList);
+        List<BookDTO> existingBooks = shelfDTO.getBooks();
 
-        List<BookSummaryDTO> booksToAdd = bookMapper.toSummaryDTOList(bookRepository.findAllById(bookList));
-        List<BookSummaryDTO> existingBooks = shelfDTO.getBooks();
-
-        for(BookSummaryDTO book : booksToAdd)
+        for(BookDTO book : booksToAdd)
         {
-            if(!existingBooks.contains(book.getId())){
+            if(!existingBooks.contains(book)){
                 log.info("Book is being added to shelf.");
                 shelfDTO.getBooks().add(book);
-                BookDTO bookDTO = bookMapper.toDTOFromSummary(book);
-                bookDTO.setShelfID(shelfDTO.getId());
-                bookService.saveBook(bookDTO);
+                book.setShelfID(shelfDTO.getId());
+                bookService.saveBook(book);
+            }
+
+        }
+        return shelfService.saveShelf(shelfDTO);
+    }
+
+    @CachePut(value = "shelf", key = "#id")
+    public ShelfDTO deleteBooksFromShelf(Long id, List<Long> books)
+    {
+        ShelfDTO shelfDTO = shelfService.getShelfById(id);
+        List<BookDTO> booksToDelete = bookService.getAllBooksList(books);
+        List<BookDTO> existingBooks = shelfDTO.getBooks();
+        for(BookDTO book : booksToDelete)
+        {
+            if(existingBooks.contains(book))
+            {
+                log.info("Deleting book {} from shelf {}.", book.getId(), shelfDTO.getId());
+                shelfDTO.getBooks().remove(book);
+                book.setShelfID(null);
+                bookService.saveBook(book);
             }
         }
         return shelfService.saveShelf(shelfDTO);

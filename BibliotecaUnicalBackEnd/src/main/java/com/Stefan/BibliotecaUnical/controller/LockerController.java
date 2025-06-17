@@ -21,7 +21,7 @@ public class LockerController {
     private final LockerService lockerService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<LockerFlatDTO> getLockerById(@PathVariable @NotNull Long id)
+    public ResponseEntity<LockerDTO> getLockerById(@PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(lockerService.getLockerById(id), HttpStatus.OK);
     }
