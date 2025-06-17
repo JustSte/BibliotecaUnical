@@ -1,6 +1,5 @@
 package com.Stefan.BibliotecaUnical.mapper;
 
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LibraryTableFlatDTO;
 import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
 import com.Stefan.BibliotecaUnical.models.LibraryTable;
 import org.mapstruct.Mapper;
@@ -17,10 +16,5 @@ public interface LibraryTableMapper {
 
     List<LibraryTable> toEntityList(List<LibraryTableDTO> libraryTableDTOList);
     List<LibraryTableDTO> toDTOList(List<LibraryTable> libraryTableList);
-
-    LibraryTable toEntityFromFlat(LibraryTableFlatDTO tableFlatDTO);
-    LibraryTableFlatDTO toFlatFromEntity(LibraryTable libraryTable);
-
-    List<LibraryTableFlatDTO> toFlatDTOListFromEntity(List<LibraryTable> libraryTableList);
 
 }

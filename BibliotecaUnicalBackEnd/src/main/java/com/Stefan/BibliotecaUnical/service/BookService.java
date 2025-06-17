@@ -2,7 +2,6 @@ package com.Stefan.BibliotecaUnical.service;
 
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.BookFlatDTO;
 import com.Stefan.BibliotecaUnical.mapper.BookMapper;
 import com.Stefan.BibliotecaUnical.models.Book;
 import com.Stefan.BibliotecaUnical.repository.BookRepository;
@@ -29,11 +28,11 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
 
-    public Page<BookFlatDTO> getAllBooks(int page, int size)
+    public Page<BookDTO> getAllBooks(int page, int size)
     {
         Pageable pageable = PageRequest.of(page,size);
         Page<Book> booksPage = bookRepository.findAll(pageable);
-        Page<BookFlatDTO> result = booksPage.map(book -> bookMapper.toFlatFromEntity(book));
+        Page<BookDTO> result = booksPage.map(book -> bookMapper.toDTO(book));
         return result;
     }
 

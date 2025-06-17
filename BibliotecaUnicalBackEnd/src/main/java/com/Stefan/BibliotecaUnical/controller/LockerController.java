@@ -1,6 +1,5 @@
 package com.Stefan.BibliotecaUnical.controller;
 
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LockerFlatDTO;
 import com.Stefan.BibliotecaUnical.DTO.LockerDTOs.LockerDTO;
 import com.Stefan.BibliotecaUnical.request.ModifyLockerRequest;
 import com.Stefan.BibliotecaUnical.service.LockerService;

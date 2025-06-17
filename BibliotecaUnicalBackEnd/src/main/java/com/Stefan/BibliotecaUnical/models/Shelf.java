@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,5 +30,5 @@ public class Shelf {
 
     @OneToMany(mappedBy = "shelf")
     @Size(max=100)
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 }

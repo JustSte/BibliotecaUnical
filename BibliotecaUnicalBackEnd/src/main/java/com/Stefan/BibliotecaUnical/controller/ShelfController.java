@@ -1,7 +1,5 @@
 package com.Stefan.BibliotecaUnical.controller;
 
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ShelfFlatDTO;
-import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.CreateShelfDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.ShelfDTO;
 import com.Stefan.BibliotecaUnical.helpers.ShelfBookHelper;
 import com.Stefan.BibliotecaUnical.request.AddBookRequest;
@@ -35,9 +33,9 @@ public class ShelfController {
     }
 
     @PostMapping()
-    public ResponseEntity<CreateShelfDTO> createShelf(@RequestBody CreateShelfDTO createShelfDTO)
+    public ResponseEntity<ShelfDTO> createShelf(@RequestBody ShelfDTO ShelfDTO)
     {
-        return new ResponseEntity<>(shelfService.createShelf(createShelfDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(shelfService.saveShelf(ShelfDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/addBooks")

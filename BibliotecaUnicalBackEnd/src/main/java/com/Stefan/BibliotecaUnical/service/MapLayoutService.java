@@ -1,7 +1,6 @@
 package com.Stefan.BibliotecaUnical.service;
 
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LibraryTableFlatDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LockerFlatDTO;
+import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
 import com.Stefan.BibliotecaUnical.DTO.LockerDTOs.LockerDTO;
 import com.Stefan.BibliotecaUnical.DTO.MapLayoutDTO;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class MapLayoutService {
     public MapLayoutDTO generateMapLayout()
     {
         MapLayoutDTO mapLayout = new MapLayoutDTO();
-        List<LibraryTableFlatDTO> tables = libraryTableService.getAllTablesList();
+        List<LibraryTableDTO> tables = libraryTableService.getAllTablesList();
         mapLayout.setTables(tables);
         List<LockerDTO> lockers = lockerService.getAllLockersList();
         mapLayout.setLockers(lockers);

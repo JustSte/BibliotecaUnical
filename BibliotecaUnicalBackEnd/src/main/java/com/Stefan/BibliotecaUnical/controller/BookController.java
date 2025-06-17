@@ -2,7 +2,6 @@ package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.BookFlatDTO;
 import com.Stefan.BibliotecaUnical.request.ModifyBookRequest;
 import com.Stefan.BibliotecaUnical.service.BookService;
 import jakarta.validation.Valid;
@@ -23,10 +22,10 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public ResponseEntity<Page<BookFlatDTO>> getAllBooks(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<BookDTO>> getAllBooks(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "15") int size)
     {
-        Page<BookFlatDTO> booksPage = bookService.getAllBooks(page, size);
+        Page<BookDTO> booksPage = bookService.getAllBooks(page, size);
         return ResponseEntity.ok(booksPage);
     }
 

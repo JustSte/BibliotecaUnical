@@ -1,12 +1,9 @@
 package com.Stefan.BibliotecaUnical.service;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ChairFlatDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LockerFlatDTO;
+
 import com.Stefan.BibliotecaUnical.DTO.LockerDTOs.LockerDTO;
 import com.Stefan.BibliotecaUnical.event.MapLayoutUpdatedEvent;
-import com.Stefan.BibliotecaUnical.mapper.ChairMapper;
-import com.Stefan.BibliotecaUnical.mapper.LockerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

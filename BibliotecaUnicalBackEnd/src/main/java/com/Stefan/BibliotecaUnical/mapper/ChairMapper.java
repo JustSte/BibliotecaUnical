@@ -2,7 +2,6 @@ package com.Stefan.BibliotecaUnical.mapper;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ChairFlatDTO;
 import com.Stefan.BibliotecaUnical.models.Chair;
 import com.Stefan.BibliotecaUnical.models.LibraryTable;
 import org.mapstruct.Mapper;
@@ -15,22 +14,18 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ChairMapper {
 
-    @Mapping(target = "libraryTable", expression = "java(mapTableFromId(chairDTO.getTableId()))")
+    @Mapping(target = "libraryTable", expression = "java(mapTableFromId(chairDTO.getLibraryTableId()))")
     Chair toEntity(ChairDTO chairDTO);
 
-    @Mapping( source = "libraryTable.id", target = "tableId")
+    @Mapping(source = "libraryTable.id", target = "libraryTableId")
     ChairDTO toDTO(Chair chair);
     ChairDTO toDTOFromSummaryDTO(ChairSummaryDTO chairSummaryDTO);
-    ChairDTO toDTOFromFlat(ChairFlatDTO chairFlatDTO);
 
     ChairSummaryDTO toChairSummaryDTOFromDTO(ChairDTO chairDTO);
     ChairSummaryDTO toChairSummaryDTOFromEntity(Chair chair);
     List<ChairSummaryDTO> toChairSummaryDTOList(List<Chair> chairList);
     List<ChairSummaryDTO> toChairSummaryDTOListFromDTO(List<ChairDTO> chairList);
 
-    @Mapping(source="libraryTable.id", target = "libraryTableId")
-    ChairFlatDTO toFlatFromEntity(Chair chair);
-    Chair toEntityFromFlat(ChairFlatDTO chairFlatDTO);
 
     List<Chair> toEntityList(List<ChairDTO> chairDTOList);
     List<ChairDTO> toDTOList(List<Chair> chairList);

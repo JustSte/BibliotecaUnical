@@ -46,7 +46,7 @@ public class TableChairHelper {
             log.info("Chair {} is being added to table {}.", chair.getId(), libraryTableDTO.getId());
             libraryTableDTO.getChairs().add(chair);
             ChairDTO chairDTO = chairMapper.toDTOFromSummaryDTO(chair);
-            chairDTO.setTableId(libraryTableDTO.getId());
+            chairDTO.setLibraryTableId(libraryTableDTO.getId());
             chairService.saveChair(chairDTO);
         }
         return libraryTableService.saveTable(libraryTableDTO);

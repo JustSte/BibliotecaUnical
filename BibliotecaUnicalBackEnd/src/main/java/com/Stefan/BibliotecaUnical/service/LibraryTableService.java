@@ -1,7 +1,6 @@
 package com.Stefan.BibliotecaUnical.service;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairSummaryDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.LibraryTableFlatDTO;
 import com.Stefan.BibliotecaUnical.DTO.LibraryTableDTOs.LibraryTableDTO;
 import com.Stefan.BibliotecaUnical.mapper.LibraryTableMapper;
 import com.Stefan.BibliotecaUnical.models.LibraryTable;
@@ -37,9 +36,9 @@ public class LibraryTableService {
         return result;
     }
 
-    public List<LibraryTableFlatDTO> getAllTablesList()
+    public List<LibraryTableDTO> getAllTablesList()
     {
-        List<LibraryTableFlatDTO> tableDTOList = libraryTableMapper.toFlatDTOListFromEntity(libraryTableRepository.findAll());
+        List<LibraryTableDTO> tableDTOList = libraryTableMapper.toDTOList(libraryTableRepository.findAll());
         return tableDTOList;
     }
 

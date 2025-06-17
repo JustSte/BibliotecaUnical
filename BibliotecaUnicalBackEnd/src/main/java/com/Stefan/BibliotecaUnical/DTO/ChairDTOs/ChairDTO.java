@@ -14,5 +14,5 @@ public class ChairDTO {
     private LocalDateTime occupiedUntil;
     private int positionX;
     private int positionY;
-    private Long tableId;
+    private Long libraryTableId;
 }

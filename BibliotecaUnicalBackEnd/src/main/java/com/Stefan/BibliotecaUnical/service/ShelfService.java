@@ -1,8 +1,5 @@
 package com.Stefan.BibliotecaUnical.service;
 
-import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ShelfFlatDTO;
-import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.CreateShelfDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.ShelfDTO;
 import com.Stefan.BibliotecaUnical.mapper.ShelfMapper;
 import com.Stefan.BibliotecaUnical.models.Shelf;
@@ -53,14 +50,6 @@ public class ShelfService {
         log.info("Shelf is being saved.");
         Shelf shelf = shelfMapper.toEntity(ShelfDTO);
         ShelfDTO saved = shelfMapper.toDTO(shelfRepository.save(shelf));
-        return saved;
-    }
-    //To review all createShelf logic, change it to be like table-chair
-    public CreateShelfDTO createShelf(CreateShelfDTO createShelfDTO)
-    {
-        log.info("Shelf is being created.");
-        ShelfDTO shelfDTO = shelfMapper.toDTOFromCreate(createShelfDTO);
-        CreateShelfDTO saved = shelfMapper.toCreateShelfDTO(saveShelf(shelfDTO));
         return saved;
     }
 

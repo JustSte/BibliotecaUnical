@@ -1,7 +1,6 @@
 package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
-import com.Stefan.BibliotecaUnical.DTO.FlatDTOs.ChairFlatDTO;
 import com.Stefan.BibliotecaUnical.service.ChairService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
