@@ -10,9 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/book")
@@ -21,14 +20,16 @@ public class BookController {
 
     private final BookService bookService;
 
+    @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
     @GetMapping
     public ResponseEntity<Page<BookDTO>> getAllBooks(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "15") int size)
+                                                     @RequestParam(defaultValue = "15") int size)
     {
         Page<BookDTO> booksPage = bookService.getAllBooks(page, size);
         return ResponseEntity.ok(booksPage);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping("/withoutShelf")
     public ResponseEntity<Page<BookSummaryDTO>> getAllBooksWithoutShelf(@RequestParam(defaultValue = "0") int page,
                                                                         @RequestParam(defaultValue = "15") int size)
@@ -36,6 +37,7 @@ public class BookController {
         return new ResponseEntity<>(bookService.getAllBooksWithoutShelf(page, size), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getBookById(@PathVariable @NotNull Long id)
     {
@@ -43,6 +45,7 @@ public class BookController {
         return ResponseEntity.ok(bookDTO);
     }
 
+    @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
     @GetMapping("/ofShelf/{id}")
     public ResponseEntity<Page<BookSummaryDTO>> getBooksOfShelf(@RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "15") int size,
@@ -51,18 +54,21 @@ public class BookController {
         return ResponseEntity.ok(bookSummaryDTOPage);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @PostMapping
     public ResponseEntity<BookDTO> createBook(@RequestBody BookDTO bookDTO)
     {
         return new ResponseEntity<>(bookService.saveBook(bookDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @Valid @RequestBody ModifyBookRequest request)
     {
         return new ResponseEntity<>(bookService.updateBook(id, request), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id)
     {

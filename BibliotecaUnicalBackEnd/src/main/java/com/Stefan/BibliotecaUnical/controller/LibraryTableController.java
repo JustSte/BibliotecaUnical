@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class LibraryTableController {
     private final LibraryTableService libraryTableService;
     private final TableChairHelper tableChairHelper;
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping()
     public ResponseEntity<Page<LibraryTableDTO>> getAllTables(@RequestParam(defaultValue = "0") int page,
                                                               @RequestParam(defaultValue = "8") int size)
@@ -31,36 +33,42 @@ public class LibraryTableController {
         return new ResponseEntity<>(libraryTableService.getAllTables(page,size), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<LibraryTableDTO> getTableById(@PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(libraryTableService.getTableById(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping("/chairs/{id}")
     public ResponseEntity<List<ChairSummaryDTO>> getChairsOfTable(@PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(libraryTableService.getChairsOfTable(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<LibraryTableDTO> saveLibraryTable(@RequestBody LibraryTableDTO libraryTableDTO)
     {
         return new ResponseEntity<>(libraryTableService.saveTable(libraryTableDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/addChairs")
     public ResponseEntity<LibraryTableDTO> addChairToTable(@RequestBody AddChairRequest addChairRequest)
     {
         return new ResponseEntity<>((tableChairHelper.addChairsToTable(addChairRequest.getLibraryTableId())), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<LibraryTableDTO> modifyTable(@RequestBody ModifyTableRequest modifyTableRequest, @PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(libraryTableService.updateTable(modifyTableRequest, id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTable(@PathVariable @NotNull Long id)
     {
@@ -68,6 +76,7 @@ public class LibraryTableController {
         return new ResponseEntity<>(("Table with id: " + id + " successfully deleted."), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/chairs/{id}")
     public ResponseEntity<String> deleteChairsOfTable(@PathVariable @NotNull Long id)
     {

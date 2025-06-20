@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,12 +17,14 @@ public class ChairController {
 
     private final ChairService chairService;
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ChairDTO> getChairById(@PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(chairService.getChairById(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping
     public ResponseEntity<Page<ChairDTO>> getAllChairs(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "8") int size)
@@ -29,12 +32,14 @@ public class ChairController {
         return new ResponseEntity<>(chairService.getAllChairs(page, size), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ChairDTO> saveChair(@RequestBody ChairDTO chairDTO)
     {
         return new ResponseEntity<>(chairService.saveChair(chairDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteChair(Long id)
     {
