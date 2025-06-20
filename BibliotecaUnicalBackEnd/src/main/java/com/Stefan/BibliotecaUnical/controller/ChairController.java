@@ -2,6 +2,8 @@ package com.Stefan.BibliotecaUnical.controller;
 
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
 import com.Stefan.BibliotecaUnical.service.ChairService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/chair")
 @RequiredArgsConstructor
+@Tag(name = "Chairs", description = "Manage chairs of table")
 public class ChairController {
 
     private final ChairService chairService;
 
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping("/{id}")
+    @Operation(summary = "Retrive a chair by it's id")
     public ResponseEntity<ChairDTO> getChairById(@PathVariable @NotNull Long id)
     {
         return new ResponseEntity<>(chairService.getChairById(id), HttpStatus.OK);
@@ -26,6 +30,7 @@ public class ChairController {
 
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @GetMapping
+    @Operation(summary = "Retrive all chairs")
     public ResponseEntity<Page<ChairDTO>> getAllChairs(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "8") int size)
     {
@@ -34,6 +39,7 @@ public class ChairController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
+    @Operation(summary = "Create a chair (don't use, for test only, use addChairsOfTable)")
     public ResponseEntity<ChairDTO> saveChair(@RequestBody ChairDTO chairDTO)
     {
         return new ResponseEntity<>(chairService.saveChair(chairDTO), HttpStatus.CREATED);
@@ -41,6 +47,7 @@ public class ChairController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a chair")
     public ResponseEntity<String> deleteChair(Long id)
     {
         chairService.deleteChair(id);

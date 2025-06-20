@@ -31,7 +31,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         //PUBLIC
-                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/public/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html").permitAll()
 
                         //USER
                         .requestMatchers("/api/mapLayout/**","/api/occupy/**", "/api/shelf/**", "/api/book/**").hasAnyRole("USER","STAFF", "ADMIN")
