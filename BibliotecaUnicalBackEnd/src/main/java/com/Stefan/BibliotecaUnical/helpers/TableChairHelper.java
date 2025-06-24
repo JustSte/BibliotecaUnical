@@ -8,6 +8,9 @@ import com.Stefan.BibliotecaUnical.service.ChairService;
 import com.Stefan.BibliotecaUnical.service.LibraryTableService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ public class TableChairHelper {
     private final ChairMapper chairMapper;
 
     @Transactional
+    @Cacheable(value = "libraryTable", key = "#id")
     public List<ChairSummaryDTO> generateChairsForTable()
     {
         List<ChairSummaryDTO> chairSummaryDTOList = new ArrayList<>();
@@ -36,6 +40,7 @@ public class TableChairHelper {
     }
 
     @Transactional
+    @CachePut(value = "libraryTable", key = "#result.id")
     public LibraryTableDTO addChairsToTable(Long id)
     {
         LibraryTableDTO libraryTableDTO = libraryTableService.getTableById(id);
@@ -53,6 +58,7 @@ public class TableChairHelper {
     }
 
     @Transactional
+    @CacheEvict(value = "libraryTable", key = "#id")
     public void deleteChairsOfTable(Long id)
     {
         log.info("Deleting chairs of table {}.", id);
