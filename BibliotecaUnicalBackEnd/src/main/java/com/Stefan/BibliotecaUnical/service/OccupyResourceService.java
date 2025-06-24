@@ -7,6 +7,8 @@ import com.Stefan.BibliotecaUnical.event.MapLayoutUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@EnableScheduling
 public class OccupyResourceService {
 
     private final ApplicationEventPublisher eventPublisher;
@@ -96,6 +99,8 @@ public class OccupyResourceService {
         eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
 
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * ?")
     public void freeAllChairs()
     {
         log.info("Freeing all chairs.");
@@ -109,7 +114,7 @@ public class OccupyResourceService {
         }
         eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
-
+    @Scheduled(cron = "0 0 0 * * ?")
     public void freeAllLockers()
     {
         log.info("Freeing all lockers.");
