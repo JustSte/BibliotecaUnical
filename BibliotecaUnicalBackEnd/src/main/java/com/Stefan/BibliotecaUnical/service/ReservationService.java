@@ -1,0 +1,147 @@
+package com.Stefan.BibliotecaUnical.service;
+
+import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
+import com.Stefan.BibliotecaUnical.DTO.LockerDTOs.LockerDTO;
+import com.Stefan.BibliotecaUnical.DTO.ReservationDTOs.ReservationDTO;
+import com.Stefan.BibliotecaUnical.mapper.ReservationMapper;
+import com.Stefan.BibliotecaUnical.models.Reservation;
+import com.Stefan.BibliotecaUnical.repository.ReservationRepository;
+import com.Stefan.BibliotecaUnical.request.ReservationRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
+public class ReservationService {
+
+    private final ReservationMapper reservationMapper;
+    private final ReservationRepository reservationRepository;
+    private final ChairService chairService;
+    private final LockerService lockerService;
+
+    public ReservationDTO createReservation(ReservationRequest request, String userMail)
+    {
+        log.info("\nRequest : {}", request);
+        ReservationDTO reservation = new ReservationDTO();
+        reservation.setStatus("PENDING_CONFIRMATION");
+        reservation.setStartTime(LocalDateTime.now());
+        reservation.setNextConfirmationTime(LocalDateTime.now().plusHours(2));
+        reservation.setResourceType(request.getResourceType());
+        reservation.setResourceId(request.getResourceId());
+        reservation.setUserId(request.getUserId());
+        reservation.setUserMail(userMail);
+        ReservationDTO saved = saveReservation(reservation);
+        if (!checkAvailability(saved))
+        {
+            reservationRepository.deleteById(saved.getId());
+            throw new IllegalStateException("Resource not available to reserve.");
+        }
+        reserveResource(reservation.getResourceType(), reservation.getResourceId());
+        return saved;
+    }
+
+    public void cancelReservation(Long id, String userId)
+    {
+        ReservationDTO reservation = getReservationById(id);
+        if (reservation.getUserId().equals(userId))
+        {
+            reservation.setStatus("CANCELLED");
+            saveReservation(reservation);
+            freeResource(reservation.getResourceType(), reservation.getResourceId());
+        }
+    }
+
+    public ReservationDTO saveReservation(ReservationDTO reservationDTO)
+    {
+        Reservation reservation = reservationMapper.toEntity(reservationDTO);
+        ReservationDTO saved = reservationMapper.toDTO(reservationRepository.save(reservation));
+        return saved;
+    }
+
+    private boolean checkAvailability(ReservationDTO reservation)
+    {
+        log.info("Reservation: {}", reservation);
+        String type = reservation.getResourceType();
+        boolean available = false;
+        if (type == null)
+        {
+            throw new ResourceNotFoundException("No resource selected.");
+        }
+        else if (type.toUpperCase().equals("CHAIR"))
+        {
+            if (chairService.getChairById(reservation.getResourceId()).isReserved() || chairService.getChairById(reservation.getResourceId()).isOccupied())
+            {
+                throw new IllegalStateException("Chair not available, check again later or choose another chair.");
+            }
+        }
+        else if (type.toUpperCase().equals("LOCKER"))
+        {
+            if (lockerService.getLockerById(reservation.getResourceId()).isOccupied() || lockerService.getLockerById(reservation.getResourceId()).isReserved())
+            {
+                throw new IllegalStateException("Locker not available, check again later or choose another locker.");
+            }
+        }
+        available = true;
+        return available;
+    }
+
+    public ReservationDTO getReservationById(Long id)
+    {
+        ReservationDTO reservation = reservationMapper.toDTO(reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No reservation found.")));
+        return reservation;
+    }
+
+    public List<ReservationDTO> getActiveAndNeedingReconfirmation()
+    {
+        List<ReservationDTO> reservationDTOList = reservationMapper.toDTOList(reservationRepository.findActiveReservationsNeedingConfirmation(LocalDateTime.now()));
+        return reservationDTOList;
+    }
+
+    public void reserveResource(String resourceType, Long resourceId)
+    {
+        if (resourceType == null || resourceId == null)
+        {
+            throw new ResourceNotFoundException("No such resource.");
+        }
+        if (resourceType.equals("CHAIR"))
+        {
+            ChairDTO chairDTO = chairService.getChairById(resourceId);
+            chairDTO.setReserved(true);
+            chairService.saveChair(chairDTO);
+        }
+        if (resourceType.equals("LOCKER"))
+        {
+            LockerDTO lockerDTO = lockerService.getLockerById(resourceId);
+            lockerDTO.setReserved(true);
+            lockerService.saveLocker(lockerDTO);
+        }
+    }
+
+    public void freeResource(String resourceType, Long resourceId)
+    {
+        if (resourceType == null || resourceId == null)
+        {
+            throw new ResourceNotFoundException("No such resource.");
+        }
+        if (resourceType.equals("CHAIR"))
+        {
+            ChairDTO chairDTO = chairService.getChairById(resourceId);
+            chairDTO.setReserved(false);
+            chairService.saveChair(chairDTO);
+        }
+        if (resourceType.equals("LOCKER"))
+        {
+            LockerDTO lockerDTO = lockerService.getLockerById(resourceId);
+            lockerDTO.setReserved(false);
+            lockerService.saveLocker(lockerDTO);
+        }
+    }
+}

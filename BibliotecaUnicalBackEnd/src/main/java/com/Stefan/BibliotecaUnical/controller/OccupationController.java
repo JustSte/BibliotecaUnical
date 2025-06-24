@@ -25,7 +25,7 @@ public class OccupationController {
     @Operation(summary = "Reserve chair")
     public ResponseEntity<Void> occupyChair(@PathVariable Long id)
     {
-        occupyResourceService.occupyChair(id, id);
+        occupyResourceService.occupyChair(id);
         return ResponseEntity.ok().build();
     }
 
@@ -34,7 +34,7 @@ public class OccupationController {
     @Operation(summary = "Reserve locker")
     public ResponseEntity<Void> occupyLocker(@PathVariable Long id)
     {
-        occupyResourceService.occupyLocker(id, id);
+        occupyResourceService.occupyLocker(id);
         return ResponseEntity.ok().build();
     }
 

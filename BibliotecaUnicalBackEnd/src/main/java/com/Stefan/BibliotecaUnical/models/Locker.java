@@ -19,6 +19,8 @@ public class Locker {
     @Column(nullable = false)
     private boolean occupied;
     private LocalDateTime occupiedUntil;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean reserved;
     @Column(nullable = false)
     private int positionX;
     @Column(nullable = false)

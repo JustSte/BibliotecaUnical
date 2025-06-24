@@ -25,9 +25,9 @@ public class OccupyResourceService {
     private final LockerService lockerService;
 
     @Transactional
-    public void occupyChair(Long chairId, Long userId)
+    public void occupyChair(Long chairId)
     {
-        log.info("Occupying chair {} by user {}", chairId, userId);
+        log.info("Occupying chair {}", chairId);
         ChairDTO chairDTO = chairService.getChairById(chairId);
 
         if (chairDTO.isOccupied())
@@ -43,9 +43,9 @@ public class OccupyResourceService {
     }
 
     @Transactional
-    public void occupyLocker(Long lockerId, Long userId)
+    public void occupyLocker(Long lockerId)
     {
-        log.info("Occupying locker {} by user {}", lockerId, userId);
+        log.info("Occupying locker {}", lockerId);
         LockerDTO lockerDTO = lockerService.getLockerById(lockerId);
 
         if(lockerDTO.isOccupied())
