@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class LockerDTO {
     private Long id;
+    private Long version;
     private boolean occupied;
     private LocalDateTime occupiedUntil;
     private boolean reserved;

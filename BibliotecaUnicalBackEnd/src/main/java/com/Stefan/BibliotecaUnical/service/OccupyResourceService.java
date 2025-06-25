@@ -31,75 +31,34 @@ public class OccupyResourceService {
     public void occupyChair(Long chairId)
     {
         log.info("Occupying chair {}", chairId);
-        ChairDTO chairDTO = chairService.getChairById(chairId);
-
-        if (chairDTO.isOccupied())
-        {
-            throw new IllegalStateException("Chair already occupied.");
-        }
-
-        chairDTO.setOccupied(true);
-        chairDTO.setOccupiedUntil(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES));
-        chairService.saveChair(chairDTO);
-
+        chairService.occupyChair(chairId);
         eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
 
-    @Transactional
     public void occupyLocker(Long lockerId)
     {
         log.info("Occupying locker {}", lockerId);
-        LockerDTO lockerDTO = lockerService.getLockerById(lockerId);
-
-        if(lockerDTO.isOccupied())
-        {
-            throw new IllegalStateException("Locker is already occupied.");
-        }
-
-        lockerDTO.setOccupied(true);
-        lockerDTO.setOccupiedUntil(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES));
-        lockerService.saveLocker(lockerDTO);
-
+        lockerService.occupyLocker(lockerId);
         eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
 
-    @Transactional
+
     public void freeChair(Long chairId)
     {
         log.info("Freeing chair with id: {}", chairId);
-
-        ChairDTO chairDTO = chairService.getChairById(chairId);
-        if(!chairDTO.isOccupied())
-        {
-            throw new IllegalStateException("Chair is not occupied, nothing to free.");
-        }
-
-        chairDTO.setOccupied(false);
-        chairDTO.setOccupiedUntil(null);
-        chairService.saveChair(chairDTO);
-
+        chairService.freeChairFromOccupation(chairId);
         eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
 
-    @Transactional
+
     public void freeLocker(Long lockerId)
     {
         log.info("Freeing locker with id: {}", lockerId);
-
-        LockerDTO lockerDTO = lockerService.getLockerById(lockerId);
-        if(!lockerDTO.isOccupied())
-        {
-            throw new IllegalStateException("Locker is not occupied, nothing to free.");
-        }
-
-        lockerDTO.setOccupied(false);
-        lockerDTO.setOccupiedUntil(null);
-        lockerService.saveLocker(lockerDTO);
-
+        lockerService.freeLockerFromOccupation(lockerId);
         eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
 
-    @Transactional
+
     @Scheduled(cron = "0 0 0 * * ?")
     public void freeAllChairs()
     {

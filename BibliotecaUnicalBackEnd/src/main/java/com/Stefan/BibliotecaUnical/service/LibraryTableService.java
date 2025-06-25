@@ -67,16 +67,16 @@ public class LibraryTableService {
         return saved;
     }
 
+    @Transactional
     @CachePut(value = "libraryTable", key = "#result.id")
     public LibraryTableDTO updateTable(ModifyTableRequest request, Long id)
     {
         log.info("LibraryTable {} is being modified.", id);
-        LibraryTableDTO tableToModify = getTableById(id);
-        tableToModify.setName(request.getName());
-        tableToModify.setPositionX(request.getPositionX());
-        tableToModify.setPositionY(request.getPositionY());
-        LibraryTableDTO saved = saveTable(tableToModify);
-        return saved;
+        LibraryTable libraryTable = libraryTableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No libraryTable with id: " + id + " found."));
+        libraryTable.setName(request.getName());
+        libraryTable.setPositionX(request.getPositionX());
+        libraryTable.setPositionY(request.getPositionY());
+        return libraryTableMapper.toDTO(libraryTable);
     }
 
     @CacheEvict(value = "libraryTable", key = "#id")

@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
+
 public class ReservationService {
 
     private final ReservationMapper reservationMapper;
@@ -27,6 +27,7 @@ public class ReservationService {
     private final ChairService chairService;
     private final LockerService lockerService;
 
+    @Transactional
     public ReservationDTO createReservation(ReservationRequest request, String userMail)
     {
         log.info("\nRequest : {}", request);
@@ -44,21 +45,25 @@ public class ReservationService {
             reservationRepository.deleteById(saved.getId());
             throw new IllegalStateException("Resource not available to reserve.");
         }
+        log.info("OUTSIDE CHECKAVAILABLE");
         reserveResource(reservation.getResourceType(), reservation.getResourceId());
         return saved;
     }
 
+    @Transactional
     public void cancelReservation(Long id, String userId)
     {
         ReservationDTO reservation = getReservationById(id);
         if (reservation.getUserId().equals(userId))
         {
+
             reservation.setStatus("CANCELLED");
-            saveReservation(reservation);
             freeResource(reservation.getResourceType(), reservation.getResourceId());
+            saveReservation(reservation);
         }
     }
 
+    @Transactional
     public ReservationDTO saveReservation(ReservationDTO reservationDTO)
     {
         Reservation reservation = reservationMapper.toEntity(reservationDTO);
@@ -66,6 +71,7 @@ public class ReservationService {
         return saved;
     }
 
+    @Transactional
     private boolean checkAvailability(ReservationDTO reservation)
     {
         log.info("Reservation: {}", reservation);
@@ -113,15 +119,11 @@ public class ReservationService {
         }
         if (resourceType.equals("CHAIR"))
         {
-            ChairDTO chairDTO = chairService.getChairById(resourceId);
-            chairDTO.setReserved(true);
-            chairService.saveChair(chairDTO);
+            chairService.reserveChair(resourceId);
         }
         if (resourceType.equals("LOCKER"))
         {
-            LockerDTO lockerDTO = lockerService.getLockerById(resourceId);
-            lockerDTO.setReserved(true);
-            lockerService.saveLocker(lockerDTO);
+            lockerService.reserveLocker(resourceId);
         }
     }
 
@@ -133,15 +135,11 @@ public class ReservationService {
         }
         if (resourceType.equals("CHAIR"))
         {
-            ChairDTO chairDTO = chairService.getChairById(resourceId);
-            chairDTO.setReserved(false);
-            chairService.saveChair(chairDTO);
+            chairService.freeChairFromReservation(resourceId);
         }
         if (resourceType.equals("LOCKER"))
         {
-            LockerDTO lockerDTO = lockerService.getLockerById(resourceId);
-            lockerDTO.setReserved(false);
-            lockerService.saveLocker(lockerDTO);
+            lockerService.freeLockerFromReservation(resourceId);
         }
     }
 }

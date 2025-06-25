@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -32,10 +33,18 @@ public class ReservationController {
         String userId = jwt.getClaimAsString("sub");
         String userMail = jwt.getClaimAsString("email");
         request.setUserId(userId);
-        ReservationDTO reservationDTO = reservationService.createReservation(request, userMail);
-        reservationConfirmationHelper.sendConfirmation(reservationDTO);
-        reservationConfirmationHelper.expireConfirmationRequest(reservationDTO, LocalDateTime.now());
-        return new ResponseEntity<>(reservationDTO, HttpStatus.CREATED);
+        try
+        {
+            ReservationDTO reservationDTO = reservationService.createReservation(request, userMail);
+            reservationConfirmationHelper.sendConfirmation(reservationDTO);
+            reservationConfirmationHelper.expireConfirmationRequest(reservationDTO, LocalDateTime.now());
+            return new ResponseEntity<>(reservationDTO, HttpStatus.CREATED);
+        }
+        catch(ObjectOptimisticLockingFailureException e)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Error: Someone already reserved this resource. Refresh the page.");
+        }
     }
 
     @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")

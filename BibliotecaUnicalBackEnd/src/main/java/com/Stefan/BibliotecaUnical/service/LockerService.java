@@ -15,7 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -37,10 +40,12 @@ public class LockerService {
     @Cacheable(value = "locker", key="#id")
     public LockerDTO getLockerById(Long id)
     {
-        LockerDTO lockerDTO = lockerMapper.toDTO(lockerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found.")));
+        LockerDTO lockerDTO = lockerMapper.toDTO(lockerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found.")));
         return lockerDTO;
     }
 
+    @Transactional
     @CachePut(value = "locker", key = "#result.id")
     public LockerDTO saveLocker(LockerDTO lockerDTO)
     {
@@ -56,18 +61,70 @@ public class LockerService {
         return lockerDTOList;
     }
 
+    @Transactional
     @CachePut(value = "locker", key = "#result.id")
     public LockerDTO updateLocker(ModifyLockerRequest request)
     {
-        LockerDTO lockerToModify = getLockerById(request.getLockerId());
-        lockerToModify.setOccupied(request.isOccupied());
-        lockerToModify.setPositionX(request.getPositionX());
-        lockerToModify.setPositionY(request.getPositionY());
-        LockerDTO modified = saveLocker(lockerToModify);
-        return modified;
+        Locker locker = lockerRepository.findById(request.getLockerId())
+                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + request.getLockerId() + " not found."));
+
+        locker.setOccupied(request.isOccupied());
+        locker.setPositionX(request.getPositionX());
+        locker.setPositionY(request.getPositionY());
+        return lockerMapper.toDTO(locker);
 
     }
 
+    @Transactional
+    @CachePut(value = "locker", key = "#id")
+    public LockerDTO freeLockerFromReservation(Long id)
+    {
+        Locker locker = lockerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found."));
+        locker.setReserved(false);
+        return lockerMapper.toDTO(locker);
+    }
+
+    @Transactional
+    @CachePut(value = "locker", key = "#id")
+    public LockerDTO reserveLocker(Long id)
+    {
+        Locker locker = lockerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found."));
+        locker.setReserved(true);
+        return lockerMapper.toDTO(locker);
+    }
+
+    @Transactional
+    @CachePut(value = "locker", key = "#id")
+    public LockerDTO occupyLocker(Long id)
+    {
+        Locker locker = lockerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found."));
+        if(locker.isOccupied())
+        {
+            throw new IllegalStateException("Resource already occupied!");
+        }
+        locker.setOccupied(true);
+        locker.setOccupiedUntil(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES));
+        return lockerMapper.toDTO(locker);
+    }
+
+    @Transactional
+    @CachePut(value = "locker", key = "#id")
+    public LockerDTO freeLockerFromOccupation(Long id)
+    {
+        Locker locker = getLockerFromRepository(id);
+        if(!locker.isOccupied())
+        {
+            throw new IllegalStateException("Locker is not occupied, nothing to free.");
+        }
+        locker.setOccupied(false);
+        locker.setOccupiedUntil(null);
+        return lockerMapper.toDTO(locker);
+    }
+
+    @Transactional
     @CacheEvict(value = "locker", key = "#id")
     public void deleteLocker(Long id)
     {
@@ -79,6 +136,13 @@ public class LockerService {
         {
             throw new RuntimeException("Locker with id: " + id + " not found.");
         }
+    }
+
+    private Locker getLockerFromRepository(Long id)
+    {
+        Locker locker = lockerRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found."));
+        return locker;
     }
 
 }

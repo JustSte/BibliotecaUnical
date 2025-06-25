@@ -16,6 +16,10 @@ public class Locker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @Column(nullable = false)
     private boolean occupied;
     private LocalDateTime occupiedUntil;

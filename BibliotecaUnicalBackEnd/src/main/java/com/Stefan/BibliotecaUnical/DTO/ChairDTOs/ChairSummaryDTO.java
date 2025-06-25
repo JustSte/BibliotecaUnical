@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ChairSummaryDTO {
 
     private Long id;
+    private Long version;
     private boolean occupied;
     private LocalDateTime occupiedUntil;
     private boolean reserved;

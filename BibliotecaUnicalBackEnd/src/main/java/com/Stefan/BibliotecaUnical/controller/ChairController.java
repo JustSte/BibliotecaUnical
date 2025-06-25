@@ -48,7 +48,7 @@ public class ChairController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a chair")
-    public ResponseEntity<String> deleteChair(Long id)
+    public ResponseEntity<String> deleteChair(@PathVariable Long id)
     {
         chairService.deleteChair(id);
         return new ResponseEntity<>(("Chair with id: " + id + " deleted successfully."), HttpStatus.OK);

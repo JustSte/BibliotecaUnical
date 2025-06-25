@@ -20,6 +20,10 @@ public class Chair {
     @SequenceGenerator(name = "chairSeqGen", sequenceName = "chair_sequence", allocationSize = 8)
     private Long id;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @Column(nullable = false)
     private boolean occupied;
     private LocalDateTime occupiedUntil;

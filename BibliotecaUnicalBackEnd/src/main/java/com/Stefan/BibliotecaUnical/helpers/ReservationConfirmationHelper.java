@@ -36,7 +36,6 @@ public class ReservationConfirmationHelper {
         emailService.sendSimpleMail(reservation.getUserMail(), "Confirm your reservation", mailText);
     }
 
-    @Transactional
     public void confirmReservation(Long resourceId, String userId)
     {
         ReservationDTO reservation = reservationService.getReservationById(resourceId);
