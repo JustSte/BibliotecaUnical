@@ -1,0 +1,28 @@
+
+<p-menubar [model]="items" class = "sticky top-0 z-10">
+  <ng-template pTemplate="start">
+    <p-image class="flex align-self-center w-full h-20 cursor-pointer" routerLink='/' src="assets/LogoRossoNew.png" alt="Logo"/>
+  </ng-template>
+  <ng-template #item let-item>
+    <a *ngIf="!item.separator" routerLink={{item.routerLink}} (click) = "item.command?.()" class="custom-menu-item action-item">
+      <span class = "material-icons"> {{item.iconName}}</span>
+      <span> {{item.label}}</span>
+    </a>
+  </ng-template>
+
+  <ng-template pTemplate="end" let-item>
+    <a *ngIf="!authenticated" (click)="login()" class="custom-menu-item action-item">
+      <span class = "material-icons">login</span>
+      <span>Sign in</span>
+    </a>
+    <a *ngIf="authenticated" (click)="logout()" class="custom-menu-item action-item">
+      <span class = "material-icons">logout</span>
+      <span>Sign out</span>
+    </a>
+    <a (click)="toggleDarkMode()" class="custom-menu-item action-item">
+      <span class = "material-icons">dark_mode</span>
+      <span *ngIf="darkMode" >Dark Mode</span>
+      <span *ngIf="!darkMode">Light mode</span>
+    </a>
+  </ng-template>
+</p-menubar>

@@ -1,0 +1,60 @@
+<div class="search-container">
+  <p-autoComplete 
+    [(ngModel)]="selectedBookTitle"
+    [suggestions]="filteredBooks"
+    (completeMethod)="filterBooks($event)"
+    field="title"
+    [dropdown]="true"
+    (onSelect)="onBookSelect($event)"
+    placeholder="Search book by title"
+    [forceSelection]="true"
+    (onClear) ="resetSearch($event)"
+    showClear="true">
+
+    <ng-template let-book pTemplate="item">
+    {{ book.title }} (ID: {{ book.id }})
+    </ng-template>
+
+  <ng-template let-book pTemplate="selectedItem">
+    {{ book?.title }}
+  </ng-template>
+
+  <ng-template pTemplate="clearicon">
+    <i class = "pi pi-times"></i>
+  </ng-template>
+  </p-autoComplete>
+
+ <p-table
+    [value]="tableBooks"
+    [paginator]="!searchedBook"
+    [rows]="pageSize"
+    [totalRecords]="totalElements"
+    [lazy]="true"
+    (onPage)="onPageChange($event)"
+    [loading]="false"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    stripedRows="true"
+    >
+    <ng-template #header>
+        <tr>
+            <th style="width:25%">Title</th>
+            <th style="width:25%">ID</th>
+            <th style="width:25%">Shelf ID</th>
+        </tr>
+    </ng-template>
+    <ng-template *ngIf="!searchedBook" let-book #body >
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.id}}</td>
+            <td>{{ book.shelfId }}</td>
+        </tr>
+    </ng-template>
+    <ng-template *ngIf="searchedBook" let-book #body >
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.id}}</td>
+            <td>{{ book.shelfId }}</td>
+        </tr>
+    </ng-template>
+  </p-table>
+</div>

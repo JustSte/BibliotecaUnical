@@ -1,0 +1,29 @@
+
+.custom-menu-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.action-item {
+  padding: 5px 15px;
+}
+
+a.action-item:hover {
+  background: #bfbfbf;
+  border-radius: 5px;
+}
+
+.my-logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding-right: 2rem;
+}
+
+.material-icons
+{
+  padding-right: 5px;
+}
