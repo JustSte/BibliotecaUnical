@@ -1,7 +1,6 @@
 package com.Stefan.BibliotecaUnical.helpers;
 
 import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookDTO;
-import com.Stefan.BibliotecaUnical.DTO.BookDTOs.BookSummaryDTO;
 import com.Stefan.BibliotecaUnical.DTO.ShelfDTOs.ShelfDTO;
 import com.Stefan.BibliotecaUnical.mapper.BookMapper;
 import com.Stefan.BibliotecaUnical.mapper.ShelfMapper;
@@ -12,9 +11,7 @@ import com.Stefan.BibliotecaUnical.service.ShelfService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -1,0 +1,55 @@
+<div *ngIf ="!lockerChosen()"  class="flex flex-col items-center ">
+    <p class="text-3xl"> Welcome to lockers page!</p>
+    <p> Here you can see which locker is taken or not and reserve it.</p>
+    <p> <span class = "text-shadow-sm/40 text-shadow-black text-red-700">Red lockers</span> means that they are taken.</p>
+    <p> <span class = "text-shadow-sm/40 text-shadow-black text-green-600">Green lockers</span> means that they are free, try selecting one.</p>
+    <div class = "flex mt-5 ">
+        <div class = "flex flex-col gap-5 ">
+            <p class = "text-3xl self-center">Leftside lockers</p>
+            <img class = "cursor-pointer" (click)="chooseLocker('left')" src="/assets/locker-better-L.png">
+        </div>
+        <div class = "flex flex-col gap-5 ">
+            <p class = "text-3xl self-center">Rightside lockers</p>
+            <img class = "cursor-pointer"  (click)="chooseLocker('right')" src="/assets/locker-better-r.png">
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-col items-center " *ngIf ="lockerChosen()">
+    <div>
+        <p class="cursor-pointer text-2xl" (click)="unChooseLocker()">Turn back to choose the other side.</p>
+        <p>{{lockerSide()}}</p>
+    </div>
+ 
+    <div class="flex justify-center border-2 mt-10 select-none"> 
+        <div class = "flex flex-wrap justify-center border-2 w-207">
+            <p-toast />
+            <p-confirm-dialog></p-confirm-dialog>
+
+            <div *ngIf= "isReserving" class="fixed inset-0 bg-gray-700/45 flex items-center justify-center z-50">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-white border-solid"></div>
+            </div>
+            <div *ngFor="let locker of lockers()" >
+                <div class="flex flex-col items-center justify-center m-0.5 border-2 w-40 h-40 rounded-xl"
+                [ngClass]="{
+                    'bg-red-600 cursor-default pointer-events-none ': locker.reserved,
+                    'bg-green-500 hover:bg-green-600 cursor-pointer': !locker.reserved
+                }"
+                (click)="confirmReservation($event, locker)">
+                    <p> Locker number: {{locker.id}}</p>
+                    <p *ngIf="locker.occupiedUntil"> Occupied until: {{locker.occupiedUntil | date:'HH:mm'}}</p>
+                    <p> Reservation id: {{locker.reservationId}}</p>
+                </div>
+            </div>
+            <a
+            *ngIf = "lockerReserved() !== null"
+            (click)="cancelReservation($event, lockerReserved()!)" 
+            class="text-4xl mt-20 border-2 rounded-2xl bg-blue-600 w-50% h-20 flex items-center"> 
+            Sblocca armadietto: {{lockerReserved()?.reservationId}}</a>
+        </div>
+    </div>
+</div>
+
+<a (click)="incrementButton()" class="text-4xl mt-20 border-2 rounded-2xl bg-blue-600 w-50% h-20 flex items-center"> Incrementa {{count()}}</a>
+
+

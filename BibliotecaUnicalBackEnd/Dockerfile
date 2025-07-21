@@ -1,14 +1,14 @@
-# Usa un'immagine base di Java 17 (o la tua versione)
+# Usa un'immagine di base con Java
 FROM eclipse-temurin:21-jdk
 
-# Crea una directory per l'app
+# Imposta la directory di lavoro
 WORKDIR /app
 
-# Copia il JAR generato nella directory
+# Copia il jar costruito dentro il container
 COPY target/*.jar app.jar
 
-# Espone la porta (cambia se usi una diversa in Spring Boot)
+# Espone la porta su cui gira la tua app (modifica se diversa)
 EXPOSE 8080
 
-# Comando per avviare l'applicazione
+# Comando di avvio
 ENTRYPOINT ["java", "-jar", "app.jar"]

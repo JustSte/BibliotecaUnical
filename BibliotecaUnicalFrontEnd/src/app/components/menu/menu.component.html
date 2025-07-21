@@ -3,8 +3,12 @@
   <ng-template pTemplate="start">
     <p-image class="flex align-self-center w-full h-20 cursor-pointer" routerLink='/' src="assets/LogoRossoNew.png" alt="Logo"/>
   </ng-template>
+  <a routerLink="/books" class="custom-menu-item action-item"></a>
   <ng-template #item let-item>
-    <a *ngIf="!item.separator" routerLink={{item.routerLink}} (click) = "item.command?.()" class="custom-menu-item action-item">
+    <a [routerLink]="item.routerLink" (click) = "item.command?.()" 
+      [ngClass]="{
+      'invisible':!item.isVisible}" 
+      class="custom-menu-item action-item">
       <span class = "material-icons"> {{item.iconName}}</span>
       <span> {{item.label}}</span>
     </a>
@@ -15,7 +19,7 @@
       <span class = "material-icons">login</span>
       <span>Sign in</span>
     </a>
-    <a *ngIf="authenticated" (click)="logout()" class="custom-menu-item action-item">
+    <a *ngIf="authenticated" (click)="logout()" class="custom-menu-item action-item ">
       <span class = "material-icons">logout</span>
       <span>Sign out</span>
     </a>

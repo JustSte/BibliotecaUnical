@@ -15,13 +15,13 @@
     {{ book.title }} (ID: {{ book.id }})
     </ng-template>
 
-  <ng-template let-book pTemplate="selectedItem">
-    {{ book?.title }}
-  </ng-template>
+    <ng-template let-book pTemplate="selectedItem">
+      {{ book?.title }}
+    </ng-template>
 
-  <ng-template pTemplate="clearicon">
-    <i class = "pi pi-times"></i>
-  </ng-template>
+    <ng-template pTemplate="clearicon">
+      <i class = "pi pi-times"></i>
+    </ng-template>
   </p-autoComplete>
 
  <p-table
@@ -46,14 +46,14 @@
         <tr>
             <td>{{ book.title }}</td>
             <td>{{ book.id}}</td>
-            <td>{{ book.shelfId }}</td>
+            <td>{{ book.shelfID }}</td>
         </tr>
     </ng-template>
     <ng-template *ngIf="searchedBook" let-book #body >
         <tr>
-            <td>{{ book.title }}</td>
-            <td>{{ book.id}}</td>
-            <td>{{ book.shelfId }}</td>
+            <td>{{ searchedBook.title }}</td>
+            <td>{{ searchedBook.id}}</td>
+            <td>{{ searchedBook.shelfID }}</td>
         </tr>
     </ng-template>
   </p-table>

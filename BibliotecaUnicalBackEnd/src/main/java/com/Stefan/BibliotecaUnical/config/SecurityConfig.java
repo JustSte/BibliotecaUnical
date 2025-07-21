@@ -38,10 +38,10 @@ public class SecurityConfig {
                                 "/swagger-ui.html").permitAll()
 
                         //USER
-                        .requestMatchers("/api/mapLayout/**","/api/occupy/**", "/api/shelf/**", "/api/books/**", "/api/reservation/**").hasAnyRole("USER","STAFF", "ADMIN")
+                        .requestMatchers("/api/shelf/**", "/api/books/**", "/api/reservation/**", "/api/lockers/**").hasAnyRole("USER","STAFF", "ADMIN")
 
                         //STAFF
-                        .requestMatchers("/api/book/**", "/api/chair/**", "/api/mapLayout/**", "/api/libraryTable/**", "/api/locker/**").hasAnyRole("STAFF", "ADMIN")
+                        .requestMatchers("/api/book/**", "/api/chair/**", "/api/mapLayout/**", "/api/libraryTable/**").hasAnyRole("STAFF", "ADMIN")
 
                         //ADMIN
                         .requestMatchers("/api/**").hasRole("ADMIN")

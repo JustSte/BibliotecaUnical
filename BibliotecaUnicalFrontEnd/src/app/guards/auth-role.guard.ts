@@ -10,12 +10,21 @@ const isAccessAllowed = async (
   const { authenticated, grantedRoles, keycloak } = authData;
 
   const requiredRole = route.data['role'];
+
+
+  console.log('Authenticated:', authenticated);
+  console.log('Granted Roles:', grantedRoles.realmRoles);
+  console.log('Required Role:', requiredRole);
   if (!requiredRole) {
-    return false;
+    return true;
   }
 
-  const hasRequiredRole = (role: string): boolean =>
-    Object.values(grantedRoles.realmRoles).some((roles) => roles.includes(role));
+  const hasRequiredRole = (role: string): boolean => {
+    if (Array.isArray(role)) {
+      return role.some(r => grantedRoles.realmRoles.includes(r));
+    }
+    return grantedRoles.realmRoles.includes(role);
+  };
 
   if (authenticated && hasRequiredRole(requiredRole)) {
     return true;

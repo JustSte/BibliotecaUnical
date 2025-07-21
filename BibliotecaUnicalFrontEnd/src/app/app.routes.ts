@@ -5,6 +5,8 @@ import { canActivateAuthRole } from './guards/auth-role.guard';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { LockersComponent } from './components/lockers/lockers.component';
+import { SeatsComponent } from './components/seats/seats.component';
 
 export const routes: Routes = [
   { path: '',
@@ -13,8 +15,20 @@ export const routes: Routes = [
   { 
     path: 'books',
     component: BooksComponent,
+    canActivate: [canActivateAuthRole],
+    data:{role: ['USER']}
+  },
+  {
+    path: 'lockers',
+    component: LockersComponent,
 /*     canActivate: [canActivateAuthRole],
-    data:{role : 'USER'} */
+    data: {role : 'USER'} */
+  },
+  {
+    path: 'seats',
+    component: SeatsComponent,
+/*     canActivate: [canActivateAuthRole],
+    data: {role : 'USER'} */
   },
   {
     path: 'profile',

@@ -1,18 +1,17 @@
 <div class="section">
   <header>
-    <h1>Welcome, {{ user?.name }}</h1>
-    <p class="description">
-      This page is protected by an Auth Guard and uses the <code>*kaHasRoles</code> structural directive to restrict
-      access based on user roles.
-    </p>
+    <h1>Welcome, {{ user()?.name }}</h1>
   </header>
 
   <main>
     <section class="profile-card">
       <h2>Profile Details</h2>
-      <p><strong>Name:</strong> {{ user?.name }}</p>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Username:</strong> {{ user?.username }}</p>
+      <p><strong>Name:</strong> {{ user()?.name}}</p>
+      <p><strong>Email:</strong> {{ user()?.email }}</p>
+      <p><strong>Username:</strong> {{ user()?.username }}</p>
+      <p><strong>Locker reserved:</strong> {{ user()?.lockerReserved }}</p>
+      <p><strong>Seat reserved:</strong> {{ user()?.seatReserved }}</p>
     </section>
+    <button (click)="accountManagement()">Manage profile</button>
   </main>
 </div>

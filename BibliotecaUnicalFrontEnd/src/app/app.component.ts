@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MenuComponent } from './components/menu/menu.component';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,14 @@ import { MenuComponent } from './components/menu/menu.component';
 })
 export class AppComponent {
   title = 'BibliotecaUnical';
+  constructor(private authService: AuthService)
+  {
+  }
+
+  async ngOnInit()
+  {
+    this.authService.initUser().subscribe((user) => console.log(user , " user dopo init"));
+/*     const user = this.authService.getUser();
+    console.log(user , " user dopo init"); */
+  }
 }

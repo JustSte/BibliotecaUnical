@@ -24,6 +24,8 @@ public class KeycloakUserService {
 
     private static final String MISSED_CONFIRMATIONS_ATTR = "missedConfirmations";
     private static final int MAX_MISSED_CONFIRMATIONS = 5;
+    private static final String LOCKERS_RESERVED = "lockerReserved";
+    private static final String SEATS_RESERVED = "seatReserved";
 
     private final Keycloak keycloak;
 
@@ -55,6 +57,75 @@ public class KeycloakUserService {
         {
             suspendUser(userId);
         }
+    }
+
+    public void setResourceReserve(String type, String userId, Long resourceId)
+    {
+        UserResource userResource = keycloak.realm(realm).users().get(userId);
+        UserRepresentation user = userResource.toRepresentation();
+        String attributeToManage;
+        if(type.equalsIgnoreCase("locker"))
+        {
+            attributeToManage = LOCKERS_RESERVED;
+        }
+        else
+        {
+            attributeToManage = SEATS_RESERVED;
+        }
+
+        Map<String, List<String>> attributes = user.getAttributes();
+
+        if(attributes == null)
+        {
+            attributes = new HashMap<>();
+        }
+        Long count = 0L;
+
+        if(attributes.containsKey(attributeToManage))
+        {
+            count = Long.valueOf(attributes.get(attributeToManage).getFirst());
+            if( count > 1)
+            {
+                throw new RuntimeException(" You have already reserved one " +  type);
+            }
+        }
+
+        count = resourceId;
+        attributes.put(attributeToManage, List.of(String.valueOf(count)));
+        user.setAttributes(attributes);
+        userResource.update(user);
+
+    }
+
+    public void removeReserveResource(String type, String userId)
+    {
+        UserResource userResource = keycloak.realm(realm).users().get(userId);
+        UserRepresentation user = userResource.toRepresentation();
+        String attributeToManage;
+        if(type.equalsIgnoreCase("locker"))
+        {
+            attributeToManage = LOCKERS_RESERVED;
+        }
+        else
+        {
+            attributeToManage = SEATS_RESERVED;
+        }
+
+        Map<String, List<String>> attributes = user.getAttributes();
+
+        Long count = Long.valueOf(attributes.get(attributeToManage).getFirst());
+        if(count > 1)
+        {
+            count = 0L;
+            attributes.put(attributeToManage, List.of(String.valueOf(count)));
+            user.setAttributes(attributes);
+            userResource.update(user);
+        }
+        else if(count == 0)
+        {
+            throw new RuntimeException("No reservation made for this resource!");
+        }
+
     }
 
     public void resetMissedConfirmations(String userId){
@@ -156,15 +227,5 @@ public class KeycloakUserService {
         return email;
     }
 
-    public Map getAttributes(String userId)
-    {
-        UserResource userResource = keycloak.realm(realm).users().get(userId);
-        log.info("\n UserResource: {}", userResource);
-        UserRepresentation user = userResource.toRepresentation();
-        log.info("\n UserRepresentation: {}", user);
-        Map<String, List<String>> attributes = user.getAttributes();
-        log.info("\n Attributes: {}", attributes);
-        return attributes;
-    }
 
 }

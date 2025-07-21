@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { BookService } from '../../services/book.service';
+import { BookService } from '../../services/book/book.service';
 import { Book } from '../../models/book.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -43,7 +43,7 @@ export class BooksComponent implements OnInit{
 
   loadBooks(page: number, pageSize:number)
   {
-    this.bookService.getBooksPage(page, pageSize).subscribe(
+    this.bookService.getListBooks(page, pageSize).subscribe(
       {
         next: (response) => {
           this.books = response.content;

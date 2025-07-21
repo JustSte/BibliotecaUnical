@@ -1,15 +1,18 @@
 package com.Stefan.BibliotecaUnical.helpers;
 
 import com.Stefan.BibliotecaUnical.DTO.ReservationDTOs.ReservationDTO;
+import com.Stefan.BibliotecaUnical.mapper.ReservationMapper;
 import com.Stefan.BibliotecaUnical.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -19,6 +22,7 @@ import java.util.List;
 public class ReservationConfirmationHelper {
 
     private final ReservationService reservationService;
+    private final ReservationMapper reservationMapper;
     private final OccupyResourceService resourceService;
 
     private final PrecisionScheduler precisionScheduler;
@@ -26,6 +30,7 @@ public class ReservationConfirmationHelper {
     private final KeycloakUserService userService;
     private final EmailService emailService;
 
+    @Async
     public void sendConfirmation(ReservationDTO reservation)
     {
         String mailText = String.format(
@@ -80,23 +85,20 @@ public class ReservationConfirmationHelper {
         {
             reservation.setStatus("PENDING_CONFIRMATION");
             sendConfirmation(reservation);
-            expireConfirmationRequest(reservation, LocalDateTime.now());
+            expireConfirmationRequest();
         }
     }
 
-    public void expireConfirmationRequest(ReservationDTO reservationDTO, LocalDateTime time)
+    public void expireConfirmationRequest()
     {
         precisionScheduler.scheduleWithDelay(() -> {
-            if(reservationDTO.getStatus().equals("PENDING_CONFIRMATION"))
-            {
-
-                reservationDTO.setStatus("EXPIRED");
-                userService.incrementMissedConfirmations(reservationDTO.getUserId());
-                reservationService.saveReservation(reservationDTO);
-                reservationService.freeResource(reservationDTO.getResourceType(), reservationDTO.getResourceId());
-                sendMissedReservation(reservationDTO);
-            }
-            log.info("Executed after 15min");
+            LocalDateTime timeNow = LocalDateTime.now().minusMinutes(15);
+            ReservationDTO reservationDTO = reservationService.getReservationToExpire(timeNow);
+            reservationDTO.setStatus("EXPIRED");
+            userService.incrementMissedConfirmations(reservationDTO.getUserId());
+            reservationService.saveReservation(reservationDTO);
+            reservationService.freeResource(reservationDTO.getResourceType(), reservationDTO.getResourceId());
+            sendMissedReservation(reservationDTO);
         });
     }
 }

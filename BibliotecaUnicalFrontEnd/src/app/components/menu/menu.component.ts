@@ -9,14 +9,14 @@ import {
   KEYCLOAK_EVENT_SIGNAL,
   KeycloakEventType,
   typeEventArgs,
-  ReadyArgs
+  ReadyArgs,
 } from 'keycloak-angular';
 import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterModule, ButtonModule, MenubarModule, CommonModule, ImageModule],
+  imports: [RouterModule,  ButtonModule, MenubarModule, CommonModule, ImageModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
@@ -64,11 +64,12 @@ toggleDarkMode() {
     });
 
     this.items = [
-      { label: 'Home',  iconName: 'home', routerLink: '/' },
-      { label: 'Books', iconName: 'book', routerLink: '/books' },
-      { label: 'Lockers', iconName: 'key', routerLink: '/lockers' },
-      { label: 'Seats', iconName: 'chair', routerLink: '/seats' },
-      { label: 'Profile', iconName:'account_box', routerLink:'/profile'}
+      { label: 'Home',  iconName: 'home', routerLink: '/', isVisible:this.hasRealmRole("USER")},
+      { label: 'Books', iconName: 'book', routerLink: '/books' ,isVisible:this.hasRealmRole("USER")},
+      { label: 'Lockers', iconName: 'key', routerLink: '/lockers',isVisible:this.hasRealmRole("USER") },
+      { label: 'Seats', iconName: 'chair', routerLink: '/seats' , isVisible:this.hasRealmRole("USER")},
+      { label: 'Profile', iconName:'account_box', routerLink:'/profile', isVisible:this.hasRealmRole("USER")},
+      { label: 'Manage', iconName:'add_circle', routerLink:'/manage', isVisible:this.hasRealmRole("STAFF") }
     ];
 
   }
@@ -83,7 +84,9 @@ toggleDarkMode() {
     this.keycloak.logout();
   }
 
-  
+  hasRealmRole(role:string):boolean{
+    return this.keycloak.hasRealmRole(role);
+  }
 
 
 }

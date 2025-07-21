@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/locker")
+@RequestMapping("/api/lockers")
 @Tag(name = "Lockers", description = "Manage lockers")
 public class LockerController {
 
@@ -38,6 +38,14 @@ public class LockerController {
                                                          @RequestParam(defaultValue = "20") int size)
     {
         return new ResponseEntity<>(lockerService.getAllLockers(page,size), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('USER' ,'STAFF', 'ADMIN')")
+    @GetMapping("/side/{side}")
+    @Operation(summary = "Retrive a list of lockers of a left or right side")
+    public ResponseEntity<List<LockerDTO>> getLockersBySide(@PathVariable String side)
+    {
+        return new ResponseEntity<>(lockerService.lockerDTOListBySide(side), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

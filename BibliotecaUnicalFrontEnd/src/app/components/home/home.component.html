@@ -1,83 +1,70 @@
-<p class="text-4xl flex items-center justify-center">Welcome to UNICAL's library system.</p>
-<div class=" ml-5">
+<p class="ml-3 mr-3 mt-5 text-4xl flex justify-center">Welcome to UNICAL's library system.</p>
+<div class="flex flex-col ml-1 mr-1 md:ml-5 md:mr-5">
     <p class="text-xl mb-0" >In order to use this system, you have to <span class="underline"> sign in.</span></p>
-    <p>Scrolling down you can take a look at what you can do with this system.</p>
     <p>This is a university project meant to be used for an exam.</p>
     <p>Technologies used in this project:</p>
-    <div class="flex">
-        
+    <div class="flex flex-col !justify-center gap-6 md:flex-nowrap md:flex-row mt-8">
         <!-- Card 1 -->
-             <div class="box-border size 32 border-2 max-w-1/6 w-full !bg-radial from bg-green-200 to text-teal-900">
-                         <div class="flex justify-between items-center px-2 pt-2 border-b border-gray-300 pb-2 ">
-                             <p class="text-lg font-semibold">Spring Boot</p>
-                             <img class ="ml-10 h-10 w-10 " src="assets/spring-boot-48.png">
-                         </div>
-                     <div>
-                         <p class=" bg-gray-700/50">Short description of spring</p>
-                     </div>
-                    </div>
-        <!-- Card 2 -->
-        <p-card class="border-2 max-w-1/6 w-full">
-            <ng-template #title>
-                <div>
-                    <div class = "flex justify-between items-center px-2 pt-2 border-b border-gray-300 pb-2">
-                        <p class="text-lg font-semibold">Angular</p>
-                        <img class ="ml-10 h-10 w-10 " src="assets/angular-48.png" >
-                    </div>
-                </div>
-            </ng-template>
-            <div>
-                <p>Short description of angular</p>
+        <div class="card_div hover:-translate-y-2 duration-300 shadow-xl/40 !bg-radial from bg-green-200 to text-teal-900">
+            <div class="flex flex-nowrap justify-center items-center px-2 pt-2 border-b border-gray-300 pb-2">
+                <p class="h-full text-lg font-semibold">Spring Boot</p>
+                <img class ="ml-4 h-10 w-10 " src="assets/spring-boot-48.png">
             </div>
-        </p-card>
+            <div class="p-2 h-full rounded-b-xl bg-gray-700/10">
+                <p class="text-justify ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eleifend maximus vulputate. Morbi ornare tempor tincidunt. Aliquam non neque quam. Donec vitae nibh lacinia purus rhoncus pulvinar. Nam in felis a ex congue laoreet vitae non neque. Aliquam pulvinar sem quis mauris congue accumsan. Aenean quis velit et ipsum viverra aliquet et quis nibh. Fusce ullamcorper diam et ante tristique.</p>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="card_div hover:-translate-y-2 duration-300 shadow-xl/40 !bg-radial from bg-green-200 to text-teal-900">
+            <div class="flex justify-center items-center px-2 pt-2 border-b border-gray-300 pb-2 ">
+                <p class="text-lg font-semibold">Angular</p>
+                <img class ="ml-4 h-10 w-10 " src="assets/angular-48.png">
+            </div >
+            <div class="p-2 h-full rounded-b-xl bg-gray-700/10">
+                <p class="text-justify ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sollicitudin justo tellus, a pulvinar ligula consectetur sit amet. Fusce semper scelerisque mauris, vitae sodales ligula porta ut. Aenean nibh lorem, maximus et tempor vitae, pulvinar sed erat. Praesent eget sem ac sapien fermentum posuere at ac ante. Integer semper neque non ex ornare dictum. Duis sodales rhoncus orci, non convallis.</p>
+            </div>
+        </div>
         <!-- Card 3 -->
-        <p-card class="border-2 max-w-1/6 w-full">
-                <ng-template #title >
-                    <div class="flex justify-between items-center px-2 pt-2 border-b border-gray-300 pb-2">
-                        <p class="text-lg font-semibold">PrimeNg</p>
-                        <img class ="ml-10 h-10 w-10 " src="assets/primeng-48.png">
-                    </div>
-                </ng-template>
-                <div>
-                    <p>Short description of PrimeNG</p>
-                </div>
-        </p-card>
+        <div class="card_div hover:-translate-y-2 duration-300 shadow-xl/40 !bg-radial from bg-green-200 to text-teal-900">
+            <div class="flex justify-center items-center px-2 pt-2 border-b border-gray-300 pb-2">
+                <p class="text-lg font-semibold">PrimeNg</p>
+                <img class ="ml-4 h-10 w-10 " src="assets/primeng-48.png">
+            </div>
+            <div class="p-2 h-full rounded-b-xl bg-gray-700/10">
+                <p class="text-justify ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse hendrerit, felis non finibus consectetur, est augue tristique tellus, quis ultrices purus mi eget augue. Donec vitae vehicula neque. Pellentesque leo elit, pharetra ut diam vel, mattis consectetur neque. Morbi et ornare nulla. Nullam libero lectus, tincidunt at suscipit id, dapibus vitae nisi. Etiam rhoncus tortor et mauris commodo molestie. Donec.</p>
+            </div>
+        </div>
+
         <!-- Card 4 -->
-        <p-card class="border-2 max-w-1/6 w-full box-content shadow-2xl">
-                <ng-template #title >
-                    <div class="flex justify-between items-center px-2 pt-2 border-b border-gray-300 pb-2">
-                        <p class="text-lg font-semibold">Tailwind CSS</p>
-                        <img class ="ml-10 h-10 w-10 " src="assets/tailwindcss-48.png">
-                    </div>
-                </ng-template>
-                <div>
-                    <p>Short description of Tailwind CSS</p>
-                </div>
-        </p-card>
+        <div class="card_div hover:-translate-y-2 duration-300 shadow-xl/40 !bg-radial from bg-green-200 to text-teal-900">
+            <div class="flex justify-center items-center px-2 pt-2 border-b border-gray-300 pb-2 ">
+                <p class="text-lg font-semibold">Tailwind CSS</p>
+                <img class ="ml-4 h-10 w-10 " src="assets/tailwindcss-48.png">
+            </div>
+            <div class="p-2 h-full rounded-b-xl bg-gray-700/10">
+                <p class="text-justify ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eleifend odio at egestas ullamcorper. Sed eget tellus nulla. Fusce id ornare felis. Mauris pharetra dolor id tellus rutrum, quis imperdiet felis efficitur. Praesent dignissim vitae enim a rhoncus. Duis vitae felis arcu. Donec ut porttitor justo, vitae malesuada libero. Donec suscipit nunc ut diam cursus auctor. Sed pulvinar malesuada velit.</p>
+            </div>
+        </div>
         <!-- Card 5 -->
-        <p-card class="border-2 max-w-1/6 w-full">
-                <ng-template #title >
-                    <div class="flex justify-between items-center px-2 pt-2 border-b border-gray-300 pb-2">
-                        <p class="text-lg font-semibold">Redis</p>
-                        <img class ="ml-10 h-10 w-10 " src="assets/redis-48.png">
-                    </div>
-                </ng-template>
-                <div>
-                    <p>Short description of Redis</p>
-                </div>
-        </p-card>
+        <div class="card_div hover:-translate-y-2 duration-300 shadow-xl/40 !bg-radial from bg-green-200 to text-teal-900">
+            <div class="flex justify-center items-center px-2 pt-2 border-b border-gray-300 pb-2 ">
+                <p class="text-lg font-semibold">Redis</p>
+                <img class ="ml-4 h-10 w-10 " src="assets/redis-48.png">
+            </div>
+            <div class="p-2 h-full rounded-b-xl bg-gray-700/10">
+                <p class="text-justify ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tincidunt aliquet ligula, et dapibus nisl rutrum id. Vivamus placerat tristique diam sit amet vestibulum. Vivamus non tortor quis arcu pharetra sagittis. Sed ac luctus ante, vitae elementum sapien. In hac habitasse platea dictumst. Donec ac neque eget justo imperdiet bibendum. Cras sodales velit ac est euismod, sit amet sollicitudin tellus.</p>
+            </div>
+        </div>
         <!-- Card 6 -->
-        <p-card class="border-2 max-w-1/6 w-full">
-                <ng-template #title >
-                    <div class="flex justify-between items-center px-2 pt-2 border-b border-gray-300 pb-2">
-                        <p class="text-lg font-semibold">Keycloak</p>
-                        <img class ="ml-10 h-10 w-10 " src="assets/keycloak-48.png">
-                    </div>
-                </ng-template>
-                <div>
-                    <p>Short description of Keycloak</p>
-                </div>
-        </p-card>
+        <div class="card_div hover:-translate-y-2 duration-300 shadow-xl/40 !bg-radial from bg-green-200 to text-teal-900">
+            <div class="flex justify-center items-center px-2 pt-2 border-b border-gray-300 pb-2 ">
+                <p class="text-lg font-semibold">Keycloak</p>
+                <img class ="ml-4 h-10 w-10 " src="assets/keycloak-48.png">
+            </div>
+            <div class="p-2 mb-2 h-full rounded-b-xl bg-gray-700/10">
+                <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a erat malesuada neque semper sollicitudin ac at sapien. Vivamus quis ullamcorper metus. Vestibulum maximus eget justo at elementum. Cras at interdum neque, feugiat bibendum nisl. Donec arcu nunc, aliquam eu dignissim sit amet, ultricies quis ipsum. Etiam id posuere est. Quisque semper neque sed auctor pellentesque. Fusce auctor neque non.</p>
+            </div>
+        </div>
     </div>
     
 </div>

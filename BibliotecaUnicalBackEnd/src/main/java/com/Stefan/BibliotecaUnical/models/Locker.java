@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Table(name = "locker", indexes = {
+        @Index(name = "idx_locker_side", columnList = "side")
+})
 public class Locker {
 
     @Id
@@ -19,15 +22,12 @@ public class Locker {
     @Version
     @Column(nullable = false)
     private Long version;
-
     @Column(nullable = false)
-    private boolean occupied;
+    private boolean isOccupied;
     private LocalDateTime occupiedUntil;
     @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean reserved;
-    @Column(nullable = false)
-    private int positionX;
-    @Column(nullable = false)
-    private int positionY;
+    private boolean isReserved;
+    private Long reservationId;
+    private String side;
 
 }

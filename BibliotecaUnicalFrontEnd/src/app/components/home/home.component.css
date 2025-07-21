@@ -1,0 +1,19 @@
+.card_div{
+    display: flex;
+    justify-content: normal;
+    flex-direction: column;
+    justify-items: center;
+    margin:5px;
+    max-width: fit-content;
+    border-radius:16px;
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    --tw-gradient-position: in oklab !important;
+    background-image: radial-gradient(var(--tw-gradient-stops)) !important;
+}
+
+@property --tw-border-style {
+    syntax: "*";
+    inherits: false;
+    initial-value: solid;
+}
