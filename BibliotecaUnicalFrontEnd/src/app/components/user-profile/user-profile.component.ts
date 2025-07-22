@@ -20,29 +20,7 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit() {
     this.authService.getUser().subscribe((user) => this.user.set(user));
+    this.authService.refreshUser();
   }
 
-  detectUpdate = effect(() => {
-    const user = this.user();
-    if (user) {
-      console.log(user, 'changed');
-    }
-  });
-
-  /*   async ngOnInit()
-  {
-      if(this.keycloak?.authenticated)
-      {
-        const profile = await this.keycloak.loadUserProfile();
-
-        this.user = {
-          id: profile.id as string,
-          name: `${profile?.firstName} ${profile.lastName}`,
-          email: profile.email,
-          username: profile.username,
-          lockersReserved: profile.attributes?.["lockersReserved"] as number,
-          seatsReserved: profile.attributes?.["seatsReserved"] as number
-        };
-      }
-  } */
 }

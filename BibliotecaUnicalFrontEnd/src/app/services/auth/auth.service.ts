@@ -34,24 +34,9 @@ export class AuthService {
           return user;
         })
       )
-/*         const profile = this.keycloak.loadUserProfile();
-        this.isAuthenticated = true;
-
-        this.user = {
-          id: profile.id as string,
-          name: `${profile?.firstName} ${profile.lastName}`,
-          email: profile.email,
-          username: profile.username,
-          lockerReserved: this.keycloak.tokenParsed?.['lockerReserved'],
-          seatReserved: this.keycloak.tokenParsed?.['seatReserved']
-        };
-        console.log(this.user, "User authService"); */
       
   }
 
-/*   constructor(){
-    this.initUser().subscribe();
-  } */
 
 
   accountManagement() {
@@ -92,7 +77,6 @@ export class AuthService {
 
   getUserLockerReserved(): number | null
   {
-    console.warn("Locker reserved in authservice", this.user()?.lockerReserved);
     return this.user()!.lockerReserved;
   }
   

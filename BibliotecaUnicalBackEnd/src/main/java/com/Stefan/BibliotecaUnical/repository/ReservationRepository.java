@@ -35,8 +35,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             FROM Reservation b
             WHERE (b.status = 'PENDING_CONFIRMATION')
             AND b.startTime <= :timeMinus
+            AND b.userId = :userId
             """)
-    Reservation findReservationToExpire(@Param("timeMinus") LocalDateTime timeMinus);
+    Reservation findReservationToExpire(@Param("timeMinus") LocalDateTime timeMinus, @Param("userId") String userId);
 
     Optional<Reservation> findByUserId(String id);
 }

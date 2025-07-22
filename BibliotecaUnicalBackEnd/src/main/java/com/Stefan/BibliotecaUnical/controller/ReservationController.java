@@ -40,7 +40,7 @@ public class ReservationController {
             ReservationDTO reservationDTO = reservationService.createReservation(request, userMail);
 
             reservationConfirmationHelper.sendConfirmation(reservationDTO);
-            reservationConfirmationHelper.expireConfirmationRequest();
+            reservationConfirmationHelper.expireConfirmationRequest(userId);
             return new ResponseEntity<>(reservationDTO, HttpStatus.CREATED);
         }
         catch(ObjectOptimisticLockingFailureException e)

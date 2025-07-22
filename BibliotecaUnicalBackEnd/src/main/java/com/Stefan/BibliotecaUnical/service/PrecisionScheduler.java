@@ -14,7 +14,7 @@ public class PrecisionScheduler {
 
     public void scheduleWithDelay(Runnable task)
     {
-        executor.schedule(task, 15, TimeUnit.MINUTES);
+        executor.schedule(task, 1, TimeUnit.MINUTES);
     }
 
     @PreDestroy

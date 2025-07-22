@@ -7,7 +7,6 @@ import com.Stefan.BibliotecaUnical.repository.ReservationRepository;
 import com.Stefan.BibliotecaUnical.request.ReservationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.events.admin.ResourceType;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,9 +134,9 @@ public class ReservationService {
         return reservationDTO;
     }
 
-    public ReservationDTO getReservationToExpire(LocalDateTime time)
+    public ReservationDTO getReservationToExpireForUser(String userId, LocalDateTime time)
     {
-        ReservationDTO reservationDTO = reservationMapper.toDTO(reservationRepository.findReservationToExpire(time));
+        ReservationDTO reservationDTO = reservationMapper.toDTO(reservationRepository.findReservationToExpire(time, userId));
         return reservationDTO;
     }
 

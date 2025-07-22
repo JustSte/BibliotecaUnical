@@ -6,10 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../services/auth/auth.service';
-import { switchMap, tap } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
-
-
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-lockers',
@@ -28,45 +25,11 @@ export class LockersComponent {
   private readonly lockerService = inject(LockerService);
   private authService = inject(AuthService);
 
-  count = signal(0);
 
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {}
-
-  private loggingEffect = effect(() => {
-    console.log(`The count is: ${this.count()}`);
-  });
-
-/*   private changeSideEffect = effect(() => {
-    console.log(`Side changed: ${this.lockerSide()}`);
-    this.loadLockers();
-    
-  }); */
-
-/*   private checkIfUserReservedLocker = effect(() => {
-    if(!this.authService.isAuthenticated())
-    {
-      console.log("in");
-      return;
-    }
-    console.log("out");
-    let lockerId = this.authService.getUserLockerReserved();
-    console.log("aaa", lockerId);
-    if (lockerId !== null && lockerId !== 0) {
-      this.lockerService.getLocker(lockerId).subscribe((locker) => {
-      this.lockerReserved.set(locker);
-      console.log(this.lockerReserved());
-      });
-    }
-  }); */
-
-  incrementButton() {
-    this.authService.refreshUser();
-    this.count.update((value) => value + 1);
-    this.loadLockers();
-  }
 
   chooseLocker(lockerSide: 'left' | 'right') {
     this.lockerSide.set(lockerSide);
@@ -78,7 +41,8 @@ export class LockersComponent {
     this.lockerSide.set(null);
   }
 
-  loadLockers() {
+  loadLockers() 
+  {
     console.log('Loading lockers');
     const side = this.lockerSide();
     if (!side) return;
@@ -87,21 +51,14 @@ export class LockersComponent {
       next: (lockers) => this.lockers.set(lockers),
       error: (err) => console.error('Error on loading lockers', err),
     });
-    this.lockerService.checkIfUserReservedLocker().subscribe((value) => 
-    {
-      if(value !== null)
-      {
-        console.log("CheckUserLocker!:: ", value)
+
+    this.lockerService.checkIfUserReservedLocker().subscribe((value) => {
+      if (value !== null) {
         this.lockerReserved.set(value);
       }
-      });
-      this.authService.refreshUser();
-    console.log(this.lockerReserved(), 'locker reserved to check');
-    //this.authService.refreshUser();
-  }
+    });
 
-  manual(){
-    this.lockerService.getLocker(255).pipe(tap((value) => console.log(value, " ciao"))).subscribe();
+    this.authService.refreshUser();
   }
 
   freeLockerFromReservation(locker: Locker) {
@@ -121,18 +78,15 @@ export class LockersComponent {
           this.authService.refreshUser();
           setTimeout(() => {
           this.loadLockers();
-          this.isReserving.set(false);
+          this.isReserving.set(false)
         }, 1000);
-          console.log('Locker free.')
         },
-        error: (err) => alert(err.message),
+        error: (err) => {alert(err.message)},
       });
   }
 
-  onLockerClick(locker: Locker) {
+  reserveLocker(locker: Locker) {
     if (this.isReserving()) return;
-
-
     this.lockerService.reserveLocker(locker.id, 'LOCKER').pipe(
     ).subscribe({
       next: (res) => {
@@ -180,8 +134,7 @@ export class LockersComponent {
         label: 'Confirm',
       },
       accept: () => {
-        console.log(locker, ' Locker confirm');
-        this.onLockerClick(locker);
+        this.reserveLocker(locker);
         this.messageService.add({
           severity: 'info',
           summary: 'Confirmed',

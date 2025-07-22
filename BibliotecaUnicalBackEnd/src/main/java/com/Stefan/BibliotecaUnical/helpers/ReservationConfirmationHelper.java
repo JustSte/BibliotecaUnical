@@ -9,10 +9,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -85,19 +83,20 @@ public class ReservationConfirmationHelper {
         {
             reservation.setStatus("PENDING_CONFIRMATION");
             sendConfirmation(reservation);
-            expireConfirmationRequest();
+            expireConfirmationRequest(reservation.getUserId());
         }
     }
 
-    public void expireConfirmationRequest()
+    public void expireConfirmationRequest(String userId)
     {
         precisionScheduler.scheduleWithDelay(() -> {
-            LocalDateTime timeNow = LocalDateTime.now().minusMinutes(15);
-            ReservationDTO reservationDTO = reservationService.getReservationToExpire(timeNow);
+            LocalDateTime timeNow = LocalDateTime.now().minusMinutes(1);
+            ReservationDTO reservationDTO = reservationService.getReservationToExpireForUser(userId, timeNow);
             reservationDTO.setStatus("EXPIRED");
             userService.incrementMissedConfirmations(reservationDTO.getUserId());
-            reservationService.saveReservation(reservationDTO);
             reservationService.freeResource(reservationDTO.getResourceType(), reservationDTO.getResourceId());
+            reservationService.saveReservation(reservationDTO);
+            userService.removeReserveResource(reservationDTO.getResourceType(), reservationDTO.getUserId());
             sendMissedReservation(reservationDTO);
         });
     }

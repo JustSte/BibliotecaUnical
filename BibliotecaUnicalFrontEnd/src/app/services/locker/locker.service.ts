@@ -5,7 +5,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Page } from '../../models/page.models';
 import { ReservationRequest } from '../../models/reservation-request.model';
 import { ReservationService } from '../reservation/reservation.service';
-import { Reservation } from '../../models/reservation.model';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -16,7 +15,6 @@ export class LockerService {
   private apiUrl = 'http://localhost:8080/api/lockers';
   private http = inject(HttpClient);
   private lockers: Locker[] = [];
-/*   private request!: ReservationRequest; */
   private readonly reservationService = inject(ReservationService);
   private readonly authService = inject(AuthService);
 
@@ -75,7 +73,6 @@ export class LockerService {
 
   freeLocker(locker: Locker): Observable<String>
   {
-    console.log("Reservation id in locekrService: ", locker.reservationId)
     return this.reservationService.cancelReservation(locker.reservationId!);
   }
 

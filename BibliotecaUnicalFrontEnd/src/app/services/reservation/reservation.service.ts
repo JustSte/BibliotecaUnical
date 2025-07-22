@@ -61,7 +61,6 @@ export class ReservationService {
     return this.getReservationById(reservationId).pipe(
       switchMap(reservation => {
         if (this.authService.getUserId() !== reservation.userId) {
-          console.log(this.authService.getUserId(), " reservationID: ", reservation.userId);
           return throwError(() => new Error("You are not authorized to cancel this reservation!"));
         }
 

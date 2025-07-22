@@ -19,7 +19,5 @@ export class AppComponent {
   async ngOnInit()
   {
     this.authService.initUser().subscribe((user) => console.log(user , " user dopo init"));
-/*     const user = this.authService.getUser();
-    console.log(user , " user dopo init"); */
   }
 }

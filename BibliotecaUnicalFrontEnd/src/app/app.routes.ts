@@ -21,20 +21,20 @@ export const routes: Routes = [
   {
     path: 'lockers',
     component: LockersComponent,
-/*     canActivate: [canActivateAuthRole],
-    data: {role : 'USER'} */
+    canActivate: [canActivateAuthRole],
+    data: {role : 'USER'}
   },
   {
     path: 'seats',
     component: SeatsComponent,
-/*     canActivate: [canActivateAuthRole],
-    data: {role : 'USER'} */
+    canActivate: [canActivateAuthRole],
+    data: {role : 'USER'}
   },
   {
     path: 'profile',
     component: UserProfileComponent,
-/*     canActivate: [canActivateAuthRole],
-    data: {role : 'USER'} */
+    canActivate: [canActivateAuthRole],
+    data: {role : 'USER'}
   },
   { path: 'forbidden', component: ForbiddenComponent},
   { path: '**', component: NotFoundComponent}
