@@ -25,10 +25,10 @@ export class AuthService {
           name: `${profile?.firstName} ${profile.lastName}`,
           email: profile.email,
           username: profile.username,
-          lockerReserved: Number(this.keycloak.tokenParsed?.['lockerReserved']) ,
-          seatReserved: Number(this.keycloak.tokenParsed?.['seatReserved']) 
+          lockerReserved: Number(profile.attributes?.['lockerReserved'] || 0),
+          seatReserved: Number(profile.attributes?.['seatReserved']|| 0)
           };
-
+          console.warn("attributes: ", profile.attributes);
           this.isAuthenticated.set(true);
           this.user.set(user);
           return user;
@@ -84,7 +84,4 @@ export class AuthService {
   {
     return this.user()?.seatReserved;
   }
-
-
-
 }

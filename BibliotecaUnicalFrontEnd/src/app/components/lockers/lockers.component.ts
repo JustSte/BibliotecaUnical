@@ -58,7 +58,6 @@ export class LockersComponent {
       }
     });
 
-    this.authService.refreshUser();
   }
 
   freeLockerFromReservation(locker: Locker) {
@@ -75,7 +74,6 @@ export class LockersComponent {
         next: () => {
           this.isReserving.set(true);
           this.lockerReserved.set(null);
-          this.authService.refreshUser();
           setTimeout(() => {
           this.loadLockers();
           this.isReserving.set(false)
@@ -87,16 +85,29 @@ export class LockersComponent {
 
   reserveLocker(locker: Locker) {
     if (this.isReserving()) return;
-    this.lockerService.reserveLocker(locker.id, 'LOCKER').pipe(
-    ).subscribe({
+    this.lockerService.reserveLocker(locker.id, 'LOCKER').subscribe({
       next: (res) => {
-        this.isReserving.set(true);
-        this.lockerReserved.set(res);
-        this.authService.refreshUser();
-        setTimeout(() => {
-          this.loadLockers();
-          this.isReserving.set(false);
-        }, 1000);
+        if(res !== null && res.id)
+        {
+          console.log("Res in reserve: " , res);
+          this.isReserving.set(true);
+          this.lockerReserved.set(res);
+          setTimeout(() => 
+          {
+            this.loadLockers();
+            this.isReserving.set(false);
+          }, 1000);
+        }
+        else
+        {
+          console.log("Res in reserve ELSE: " , res);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'This locker is already reserved. Refresh the page!',
+            life: 3000,
+          });
+        }
+    
       },
       error: (err) => {
         this.isReserving.set(false);

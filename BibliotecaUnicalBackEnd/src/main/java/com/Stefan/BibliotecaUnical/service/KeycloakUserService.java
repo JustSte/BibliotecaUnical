@@ -24,8 +24,8 @@ public class KeycloakUserService {
 
     private static final String MISSED_CONFIRMATIONS_ATTR = "missedConfirmations";
     private static final int MAX_MISSED_CONFIRMATIONS = 5;
-    private static final String LOCKERS_RESERVED = "lockerReserved";
-    private static final String SEATS_RESERVED = "seatReserved";
+    private static final String LOCKER_RESERVED = "lockerReserved";
+    private static final String SEAT_RESERVED = "seatReserved";
 
     private final Keycloak keycloak;
 
@@ -66,11 +66,11 @@ public class KeycloakUserService {
         String attributeToManage;
         if(type.equalsIgnoreCase("locker"))
         {
-            attributeToManage = LOCKERS_RESERVED;
+            attributeToManage = LOCKER_RESERVED;
         }
         else
         {
-            attributeToManage = SEATS_RESERVED;
+            attributeToManage = SEAT_RESERVED;
         }
 
         Map<String, List<String>> attributes = user.getAttributes();
@@ -104,11 +104,11 @@ public class KeycloakUserService {
         String attributeToManage;
         if(type.equalsIgnoreCase("locker"))
         {
-            attributeToManage = LOCKERS_RESERVED;
+            attributeToManage = LOCKER_RESERVED;
         }
         else
         {
-            attributeToManage = SEATS_RESERVED;
+            attributeToManage = SEAT_RESERVED;
         }
 
         Map<String, List<String>> attributes = user.getAttributes();
@@ -149,6 +149,30 @@ public class KeycloakUserService {
         if(attributes != null && attributes.containsKey(MISSED_CONFIRMATIONS_ATTR))
         {
             return Integer.parseInt(attributes.get(MISSED_CONFIRMATIONS_ATTR).getFirst());
+        }
+        return 0;
+    }
+
+    public int getLockerReserved(String userId)
+    {
+        UserResource userResource = keycloak.realm(realm).users().get(userId);
+        UserRepresentation user = userResource.toRepresentation();
+        Map<String, List<String>> attributes = user.getAttributes();
+        if(attributes != null && attributes.containsKey(LOCKER_RESERVED))
+        {
+            return Integer.parseInt(attributes.get(LOCKER_RESERVED).getFirst());
+        }
+        return 0;
+    }
+
+    public int getSeatReserved(String userId)
+    {
+        UserResource userResource = keycloak.realm(realm).users().get(userId);
+        UserRepresentation user = userResource.toRepresentation();
+        Map<String, List<String>> attributes = user.getAttributes();
+        if(attributes != null && attributes.containsKey(SEAT_RESERVED))
+        {
+            return Integer.parseInt(attributes.get(SEAT_RESERVED).getFirst());
         }
         return 0;
     }

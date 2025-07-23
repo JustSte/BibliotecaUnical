@@ -19,10 +19,11 @@ export const provideKeycloakAngular = () =>
       url: 'http://localhost:8081',
       clientId: 'angular-client'
     },
+
     initOptions: {
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-      redirectUri:window.location.origin + '/'
+      redirectUri:window.location.origin + '/',
     },
     features: [
       withAutoRefreshToken({

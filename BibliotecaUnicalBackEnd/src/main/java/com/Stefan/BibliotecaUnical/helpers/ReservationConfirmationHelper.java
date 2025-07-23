@@ -90,7 +90,7 @@ public class ReservationConfirmationHelper {
     public void expireConfirmationRequest(String userId)
     {
         precisionScheduler.scheduleWithDelay(() -> {
-            LocalDateTime timeNow = LocalDateTime.now().minusMinutes(1);
+            LocalDateTime timeNow = LocalDateTime.now().minusMinutes(15);
             ReservationDTO reservationDTO = reservationService.getReservationToExpireForUser(userId, timeNow);
             reservationDTO.setStatus("EXPIRED");
             userService.incrementMissedConfirmations(reservationDTO.getUserId());

@@ -30,6 +30,12 @@ public class ReservationService {
     public ReservationDTO createReservation(ReservationRequest request, String userMail)
     {
         log.info("\nRequest : {}", request);
+        if (!checkAvailability(request))
+        {
+            log.warn(String.valueOf(checkAvailability(request)), " checkAvailability");
+            return null;
+            //throw new IllegalStateException("Resource not available to reserve.");
+        }
         ReservationDTO reservation = new ReservationDTO();
         reservation.setStatus("PENDING_CONFIRMATION");
         reservation.setStartTime(LocalDateTime.now());
@@ -38,13 +44,10 @@ public class ReservationService {
         reservation.setResourceId(request.getResourceId());
         reservation.setUserId(request.getUserId());
         reservation.setUserMail(userMail);
+
         ReservationDTO saved = saveReservation(reservation);
-        if (!checkAvailability(saved))
-        {
-            reservationRepository.deleteById(saved.getId());
-            throw new IllegalStateException("Resource not available to reserve.");
-        }
-        reserveResource(reservation.getResourceType(), reservation.getResourceId(), saved.getId());
+        log.warn("Before reserve resource ub reservationService");
+        reserveResource(saved.getResourceType(), saved.getResourceId(), saved.getId());
         userService.setResourceReserve(request.getResourceType(), request.getUserId(), request.getResourceId());
         return saved;
     }
@@ -71,7 +74,7 @@ public class ReservationService {
     }
 
     @Transactional
-    private boolean checkAvailability(ReservationDTO reservation)
+    private boolean checkAvailability(ReservationRequest reservation)
     {
         log.info("Reservation: {}", reservation);
         String type = reservation.getResourceType();
@@ -80,21 +83,22 @@ public class ReservationService {
         {
             throw new ResourceNotFoundException("No resource selected.");
         }
-        else if (type.toUpperCase().equals("CHAIR"))
+        else if (type.equalsIgnoreCase("CHAIR"))
         {
-            if (chairService.getChairById(reservation.getResourceId()).isReserved() || chairService.getChairById(reservation.getResourceId()).isOccupied())
+            if (chairService.getChairById(reservation.getResourceId()).isReserved() && userService.getSeatReserved(reservation.getUserId()) != 0)
             {
                 throw new IllegalStateException("Chair not available, check again later or choose another chair.");
             }
+            else available = true;
         }
-        else if (type.toUpperCase().equals("LOCKER"))
+        else if (type.equalsIgnoreCase("LOCKER"))
         {
-            if (lockerService.getLockerById(reservation.getResourceId()).isOccupied() || lockerService.getLockerById(reservation.getResourceId()).isReserved())
+            if (lockerService.getLockerById(reservation.getResourceId()).isReserved() && userService.getLockerReserved(reservation.getUserId()) != 0)
             {
                 throw new IllegalStateException("Locker not available, check again later or choose another locker.");
             }
+            else available = true;
         }
-        available = true;
         return available;
     }
 

@@ -4,7 +4,6 @@ import { ReservationRequest } from '../../models/reservation-request.model';
 import { Observable, of, switchMap, throwError } from 'rxjs';
 import { Reservation } from '../../models/reservation.model';
 import { AuthService } from '../auth/auth.service';
-import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'

@@ -8,7 +8,7 @@ import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, AnimateOnScroll, AvatarGroupModule, AvatarModule, CardModule],
+  imports: [CommonModule,AvatarGroupModule, AvatarModule, CardModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

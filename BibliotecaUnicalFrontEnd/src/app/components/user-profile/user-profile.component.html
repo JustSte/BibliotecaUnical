@@ -4,6 +4,9 @@
   </header>
 
   <main>
+  <div *ngIf= "isLoading()" class="fixed inset-0 bg-gray-700/45 flex items-center justify-center z-50">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-white border-solid"></div>
+  </div>
     <section class="profile-card">
       <h2>Profile Details</h2>
       <p><strong>Name:</strong> {{ user()?.name}}</p>
