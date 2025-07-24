@@ -5,7 +5,6 @@ import { LockerService } from '../../services/locker/locker.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { AuthService } from '../../services/auth/auth.service';
 import { tap } from 'rxjs';
 
 @Component({
@@ -20,10 +19,9 @@ export class LockersComponent {
   lockerSide = signal<'left' | 'right' | null>(null);
   lockers = signal<Locker[]>([]);
   errorMessage: string | null = null;
-  isReserving = signal<Boolean>(false);
+  isReserving = signal<boolean>(false);
   lockerReserved = signal<Locker | null>(null);
   private readonly lockerService = inject(LockerService);
-  private authService = inject(AuthService);
 
 
   constructor(
@@ -66,11 +64,7 @@ export class LockersComponent {
       return;
     }
 
-    this.lockerService.freeLocker(locker).pipe(
-        tap(() => {
-        })
-      )
-      .subscribe({
+    this.lockerService.freeLocker(locker).subscribe({
         next: () => {
           this.isReserving.set(true);
           this.lockerReserved.set(null);

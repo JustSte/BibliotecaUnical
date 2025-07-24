@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 public class LockerDTO {
     private Long id;
     private Long version;
-    private boolean isOccupied;
     private LocalDateTime occupiedUntil;
     private boolean isReserved;
+    private boolean isOccupied;
     private Long reservationId;
     private String side;
 }

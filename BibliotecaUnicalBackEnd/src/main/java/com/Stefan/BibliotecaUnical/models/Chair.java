@@ -24,18 +24,12 @@ public class Chair {
     @Column(nullable = false)
     private Long version;
 
-    @Column(nullable = false)
-    private boolean occupied;
     private LocalDateTime occupiedUntil;
-
     @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean reserved;
-
-    @Column(nullable = false)
-    private int positionX;
-    @Column(nullable = false)
-    private int positionY;
-
+    private boolean isReserved;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isOccupied;
+    private Long reservationId;
 
     @ManyToOne
     @JoinColumn(name = "libraryTable_id")

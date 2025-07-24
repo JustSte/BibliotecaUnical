@@ -12,7 +12,5 @@ public class LibraryTableDTO {
 
     private Long id;
     private String name;
-    private int positionX;
-    private int positionY;
     List<ChairSummaryDTO> chairs;
 }

@@ -27,17 +27,16 @@ public class LibraryTableController {
     private final LibraryTableService libraryTableService;
     private final TableChairHelper tableChairHelper;
 
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER' , 'STAFF' , 'ADMIN')")
     @GetMapping()
     @Operation(summary = "Retrive all tables")
-    public ResponseEntity<Page<LibraryTableDTO>> getAllTables(@RequestParam(defaultValue = "0") int page,
-                                                              @RequestParam(defaultValue = "8") int size)
+    public ResponseEntity<List<LibraryTableDTO>> getAllTables()
     {
 
-        return new ResponseEntity<>(libraryTableService.getAllTables(page,size), HttpStatus.OK);
+        return new ResponseEntity<>(libraryTableService.getAllTables(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER' , 'STAFF' , 'ADMIN')")
     @GetMapping("/{id}")
     @Operation(summary = "Retrive a table by it's id")
     public ResponseEntity<LibraryTableDTO> getTableById(@PathVariable @NotNull Long id)
@@ -45,7 +44,7 @@ public class LibraryTableController {
         return new ResponseEntity<>(libraryTableService.getTableById(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER' , 'STAFF' , 'ADMIN')")
     @GetMapping("/chairs/{id}")
     @Operation(summary = "Retrive a list of chairs from a table")
     public ResponseEntity<List<ChairSummaryDTO>> getChairsOfTable(@PathVariable @NotNull Long id)
@@ -53,7 +52,7 @@ public class LibraryTableController {
         return new ResponseEntity<>(libraryTableService.getChairsOfTable(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @PostMapping
     @Operation(summary = "Create a table")
     public ResponseEntity<LibraryTableDTO> saveLibraryTable(@RequestBody LibraryTableDTO libraryTableDTO)
@@ -61,7 +60,7 @@ public class LibraryTableController {
         return new ResponseEntity<>(libraryTableService.saveTable(libraryTableDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF','ADMIN')")
     @PostMapping("/addChairs")
     @Operation(summary = "Add 8 chairs to a table")
     public ResponseEntity<LibraryTableDTO> addChairToTable(@RequestBody AddChairRequest addChairRequest)
@@ -78,7 +77,7 @@ public class LibraryTableController {
         return new ResponseEntity<>(libraryTableService.updateTable(modifyTableRequest, id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a table")
     public ResponseEntity<String> deleteTable(@PathVariable @NotNull Long id)
@@ -87,7 +86,7 @@ public class LibraryTableController {
         return new ResponseEntity<>(("Table with id: " + id + " successfully deleted."), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF','ADMIN')")
     @DeleteMapping("/chairs/{id}")
     @Operation(summary = "Delete chairs from a table")
     public ResponseEntity<String> deleteChairsOfTable(@PathVariable @NotNull Long id)

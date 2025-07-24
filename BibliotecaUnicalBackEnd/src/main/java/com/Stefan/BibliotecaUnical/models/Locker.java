@@ -22,11 +22,11 @@ public class Locker {
     @Version
     @Column(nullable = false)
     private Long version;
-    @Column(nullable = false)
-    private boolean isOccupied;
     private LocalDateTime occupiedUntil;
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean isReserved;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isOccupied;
     private Long reservationId;
     private String side;
 

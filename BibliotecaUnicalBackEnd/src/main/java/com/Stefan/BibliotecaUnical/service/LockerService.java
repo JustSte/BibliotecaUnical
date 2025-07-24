@@ -77,7 +77,7 @@ public class LockerService {
         Locker locker = lockerRepository.findById(request.getLockerId())
                 .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + request.getLockerId() + " not found."));
 
-        locker.setOccupied(request.isOccupied());
+        locker.setReserved(request.isReserved());
         return lockerMapper.toDTO(locker);
 
     }

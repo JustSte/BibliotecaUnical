@@ -11,9 +11,8 @@ public class ChairSummaryDTO {
 
     private Long id;
     private Long version;
-    private boolean occupied;
     private LocalDateTime occupiedUntil;
-    private boolean reserved;
-    private int positionX;
-    private int positionY;
+    private boolean isReserved;
+    private boolean isOccupied;
+    private Long reservationId;
 }

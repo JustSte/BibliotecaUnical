@@ -1,9 +1,6 @@
 package com.Stefan.BibliotecaUnical.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -24,11 +21,9 @@ public class LibraryTable {
 
     private String name;
     @Column(nullable = false)
-    private int positionX;
-    @Column(nullable = false)
-    private int positionY;
 
     @OneToMany(mappedBy = "libraryTable")
+    @OrderBy("id ASC")
     private List<Chair> chairs = new ArrayList<>();
 
 }

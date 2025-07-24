@@ -8,7 +8,6 @@ public class ModifyLockerRequest {
     @NotNull
     private Long lockerId;
 
-    private boolean occupied;
-    private int positionX;
-    private int positionY;
+    private boolean isReserved;
+
 }

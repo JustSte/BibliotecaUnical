@@ -28,11 +28,10 @@ public class LibraryTableService {
     private final LibraryTableMapper libraryTableMapper;
     private final LibraryTableRepository libraryTableRepository;
 
-    public Page<LibraryTableDTO> getAllTables(int page, int size)
+    public List<LibraryTableDTO> getAllTables()
     {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<LibraryTable> libraryTablePage = libraryTableRepository.findAll(pageable);
-        Page<LibraryTableDTO> result = libraryTablePage.map(libraryTable -> libraryTableMapper.toDTO(libraryTable));
+        List<LibraryTable> libraryTables = libraryTableRepository.findAll();
+        List<LibraryTableDTO> result = libraryTableMapper.toDTOList(libraryTables);
         return result;
     }
 
@@ -74,8 +73,6 @@ public class LibraryTableService {
         log.info("LibraryTable {} is being modified.", id);
         LibraryTable libraryTable = libraryTableRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No libraryTable with id: " + id + " found."));
         libraryTable.setName(request.getName());
-        libraryTable.setPositionX(request.getPositionX());
-        libraryTable.setPositionY(request.getPositionY());
         return libraryTableMapper.toDTO(libraryTable);
     }
 

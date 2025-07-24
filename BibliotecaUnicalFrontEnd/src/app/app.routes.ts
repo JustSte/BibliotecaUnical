@@ -6,7 +6,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LockersComponent } from './components/lockers/lockers.component';
-import { SeatsComponent } from './components/seats/seats.component';
+import { TableComponent } from './components/table/table.component';
 
 export const routes: Routes = [
   { path: '',
@@ -25,8 +25,8 @@ export const routes: Routes = [
     data: {role : 'USER'}
   },
   {
-    path: 'seats',
-    component: SeatsComponent,
+    path: 'table',
+    component: TableComponent,
     canActivate: [canActivateAuthRole],
     data: {role : 'USER'}
   },

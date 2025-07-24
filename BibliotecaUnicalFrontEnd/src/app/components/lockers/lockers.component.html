@@ -34,7 +34,7 @@
                 [ngClass]="{
                     'bg-red-600 cursor-default pointer-events-none ': locker.reserved,
                     'bg-green-500 hover:bg-green-600 cursor-pointer': !locker.reserved,
-                    'pointer-events-none cursor-default' : false
+                    'pointer-events-none cursor-default' : lockerReserved()
                 }"
                 (click)="confirmReservation($event, locker)">
                     <p> Locker number: {{locker.id}}</p>
@@ -46,7 +46,7 @@
             *ngIf = "lockerReserved() !== null"
             (click)="cancelReservation($event, lockerReserved()!)" 
             class="text-4xl mt-20 border-2 rounded-2xl bg-blue-600 w-50% h-20 flex items-center"> 
-            Sblocca armadietto: {{lockerReserved()?.id}}</a>
+            Free locker: {{lockerReserved()?.id}}</a>
         </div>
     </div>
 </div>

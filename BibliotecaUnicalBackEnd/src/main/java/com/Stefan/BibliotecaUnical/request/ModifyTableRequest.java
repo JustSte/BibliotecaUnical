@@ -8,6 +8,4 @@ import lombok.Setter;
 public class ModifyTableRequest {
 
     private String name;
-    private int positionX;
-    private int positionY;
 }

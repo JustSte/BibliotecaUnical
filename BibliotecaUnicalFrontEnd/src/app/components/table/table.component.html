@@ -1,0 +1,43 @@
+<p-toast />
+<p-confirm-dialog></p-confirm-dialog>
+<div class = "m-auto p-2 grid grid-cols-1 md:grid-cols-2 gap-5 w-7/10 h-auto border-amber-300 border-4">
+    @if(isReserving())
+    {
+        <div class="fixed inset-0 bg-gray-700/45 flex items-center justify-center z-50">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-white border-solid"></div>
+        </div>
+    }
+
+    @for(table of tables(); track table)
+    {
+        <div class="grid grid-cols-[repeat(3,_1fr)] grid-rows-[repeat(4,_1fr)] p-5 w-full h-full ">
+            <div class="div9 row-span-4 row-start-1 col-start-2 border-2 m-1 flex flex-col items-center justify-center bg-amber-900/50 rounded-xl">
+                <p>{{table.id}}</p>
+                <p>{{table.name}}</p>
+            </div>
+
+            @for(chair of table.chairs; track chair){
+                <div class="div1 border-2 h-20 m-1 flex flex-col items-center justify-center  rounded-xl"
+                [ngClass]="{
+                    'bg-orange-500/50 cursor-default pointer-events-none ': chair.reserved,
+                    'bg-emerald-600/60 hover:bg-emerald-600/90 cursor-pointer': !chair.reserved,
+                    'pointer-events-none cursor-default' : chairReserved()
+                }"
+                (click)="confirmReservation($event, chair)">
+                    <p>{{chair.id}}</p>
+                    @if(chair.reserved)
+                    {
+                        <p >{{chair.occupiedUntil}}</p>
+                    }
+                </div>
+            }
+            @empty 
+            {<p> No chairs </p>}
+        </div>
+    } 
+    <a
+        *ngIf = "chairReserved() !== null"
+        (click)="cancelReservation($event, chairReserved()!)" 
+        class="text-4xl mt-20 border-2 rounded-2xl bg-blue-600 w-50% h-20 flex items-center"> 
+        Free chair: {{chairReserved()?.id}}</a>
+</div>

@@ -62,9 +62,10 @@ public class ChairService {
     {
         Chair chair = chairRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Chair not found"));
-        chair.setOccupied(request.isOccupied());
-        chair.setPositionX(request.getPositionX());
-        chair.setPositionY(request.getPositionY());
+        chair.setReserved(request.isReserved());
+        chair.setLibraryTable(request.getLibraryTable());
+        chair.setReservationId(request.getReservationId());
+        chair.setOccupiedUntil(request.getOccupiedUntil());
         return chairMapper.toDTO(chair);
     }
 
@@ -86,20 +87,24 @@ public class ChairService {
     @CachePut(value="chair", key="#id")
     public ChairDTO freeChairFromReservation(Long id)
     {
-        Chair chair = chairRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Chair not found"));
-        chair.setReserved(false);
-        return chairMapper.toDTO(chair);
+        Chair chairToSave = chairMapper.toEntity(getChairById(id));
+        chairToSave.setReserved(false);
+        chairToSave.setOccupiedUntil(null);
+        chairToSave.setReservationId(null);
+        Chair savedChair = chairRepository.save(chairToSave);
+        return chairMapper.toDTO(savedChair);
     }
 
     @Transactional
     @CachePut(value="chair", key="#id")
-    public ChairDTO reserveChair(Long id)
+    public ChairDTO reserveChair(Long id, Long reservationId)
     {
-        Chair chair = chairRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Chair not found"));
-        chair.setReserved(true);
-        return chairMapper.toDTO(chair);
+        Chair chairToSave = chairMapper.toEntity(getChairById(id));
+        chairToSave.setReserved(true);
+        chairToSave.setOccupiedUntil(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES));
+        chairToSave.setReservationId(reservationId);
+        Chair savedChair = chairRepository.save(chairToSave);
+        return chairMapper.toDTO(savedChair);
     }
 
     @Transactional

@@ -152,7 +152,7 @@ public class ReservationService {
         }
         if (resourceType.equals("CHAIR"))
         {
-            chairService.reserveChair(resourceId);
+            chairService.reserveChair(resourceId, reservationId);
         }
         if (resourceType.equals("LOCKER"))
         {

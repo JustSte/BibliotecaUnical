@@ -67,7 +67,7 @@ toggleDarkMode() {
       { label: 'Home',  iconName: 'home', routerLink: '/', isVisible:this.hasRealmRole("USER")},
       { label: 'Books', iconName: 'book', routerLink: '/books' ,isVisible:this.hasRealmRole("USER")},
       { label: 'Lockers', iconName: 'key', routerLink: '/lockers',isVisible:this.hasRealmRole("USER") },
-      { label: 'Seats', iconName: 'chair', routerLink: '/seats' , isVisible:this.hasRealmRole("USER")},
+      { label: 'Tables', iconName: 'weekend', routerLink: '/table' , isVisible:this.hasRealmRole("USER")},
       { label: 'Profile', iconName:'account_box', routerLink:'/profile', isVisible:this.hasRealmRole("USER")},
       { label: 'Manage', iconName:'add_circle', routerLink:'/manage', isVisible:this.hasRealmRole("STAFF") }
     ];
