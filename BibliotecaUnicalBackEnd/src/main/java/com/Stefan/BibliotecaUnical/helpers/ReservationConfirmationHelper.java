@@ -32,7 +32,7 @@ public class ReservationConfirmationHelper {
     public void sendConfirmation(ReservationDTO reservation)
     {
         String mailText = String.format(
-                "Confirm your reservation: %s/%d/confirm",
+                "Confirm your reservation: %s/confirm/%d",
                 "localhost:8080/api/reservation",
                 reservation.getId()
         );
@@ -51,14 +51,7 @@ public class ReservationConfirmationHelper {
             reservation.setStatus("ACTIVE");
             reservation.setNextConfirmationTime(LocalDateTime.now().plusHours(2));
             reservationService.saveReservation(reservation);
-            if(reservation.getResourceType().equals("CHAIR"))
-            {
-                resourceService.occupyChair(reservation.getResourceId());
-            }
-            else if (reservation.getResourceType().equals("LOCKER"))
-            {
-                resourceService.occupyLocker(reservation.getResourceId());
-            }
+            resourceService.occupyResource(reservation.getResourceId(), reservation.getResourceType());
         }
     }
 

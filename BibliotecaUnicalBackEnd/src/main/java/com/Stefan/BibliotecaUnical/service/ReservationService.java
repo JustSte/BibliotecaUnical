@@ -29,12 +29,10 @@ public class ReservationService {
     @Transactional
     public ReservationDTO createReservation(ReservationRequest request, String userMail)
     {
-        log.info("\nRequest : {}", request);
+        log.info("Creating reservation.");
         if (!checkAvailability(request))
         {
-            log.warn(String.valueOf(checkAvailability(request)), " checkAvailability");
-            return null;
-            //throw new IllegalStateException("Resource not available to reserve.");
+            throw new IllegalStateException("Resource not available to reserve.");
         }
         ReservationDTO reservation = new ReservationDTO();
         reservation.setStatus("PENDING_CONFIRMATION");
@@ -46,7 +44,6 @@ public class ReservationService {
         reservation.setUserMail(userMail);
 
         ReservationDTO saved = saveReservation(reservation);
-        log.warn("Before reserve resource ub reservationService");
         reserveResource(saved.getResourceType(), saved.getResourceId(), saved.getId());
         userService.setResourceReserve(request.getResourceType(), request.getUserId(), request.getResourceId());
         return saved;
@@ -168,11 +165,11 @@ public class ReservationService {
         }
         if (resourceType.equals("CHAIR"))
         {
-            chairService.freeChairFromReservation(resourceId);
+            chairService.freeChair(resourceId);
         }
         if (resourceType.equals("LOCKER"))
         {
-            lockerService.freeLockerFromReservation(resourceId);
+            lockerService.freeLocker(resourceId);
         }
     }
 }

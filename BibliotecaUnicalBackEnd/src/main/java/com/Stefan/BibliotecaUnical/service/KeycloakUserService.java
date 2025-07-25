@@ -203,7 +203,7 @@ public class KeycloakUserService {
 
     //secondi minuti ore giorno mese giornosettimana
     @Scheduled(cron = "0 0 0 * * ?")
-    private void checkForUserReactivation()
+    public void checkForUserReactivation()
     {
         log.info("Executing reactivateUser at midnight...");
         List<String> usersToReactivate = new ArrayList<>();

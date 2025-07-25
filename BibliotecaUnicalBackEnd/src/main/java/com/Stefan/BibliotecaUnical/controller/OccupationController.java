@@ -14,45 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/occupy")
+@RequestMapping("/api")
 @Tag(name = "Occupacy", description = "Manage chair and locker reservation")
 public class OccupationController {
 
     private final OccupyResourceService occupyResourceService;
 
     @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
-    @PostMapping("/chair/{id}")
+    @PostMapping("/resource/{resourceType}/id/{id}")
     @Operation(summary = "Reserve chair")
-    public ResponseEntity<Void> occupyChair(@PathVariable Long id)
+    public ResponseEntity<Void> occupyResouce(@PathVariable Long id, @PathVariable String resourceType)
     {
-        occupyResourceService.occupyChair(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
-    @PostMapping("/locker/{id}")
-    @Operation(summary = "Reserve locker")
-    public ResponseEntity<Void> occupyLocker(@PathVariable Long id)
-    {
-        occupyResourceService.occupyLocker(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
-    @PostMapping("/chair/free/{id}")
-    @Operation(summary = "Leave the chair free")
-    public ResponseEntity<Void> freeChair(@PathVariable Long id)
-    {
-        occupyResourceService.freeChair(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize("hasAnyRole('USER' , 'STAFF', 'ADMIN')")
-    @PostMapping("/locker/free/{id}")
-    @Operation(summary = "Leaves the locker free")
-    public ResponseEntity<Void> freeLocker(@PathVariable Long id)
-    {
-        occupyResourceService.freeLocker(id);
+        if(id == null || resourceType.isBlank())
+        {
+            return ResponseEntity.notFound().build();
+        }
+        occupyResourceService.occupyResource(id, resourceType);
         return ResponseEntity.ok().build();
     }
 

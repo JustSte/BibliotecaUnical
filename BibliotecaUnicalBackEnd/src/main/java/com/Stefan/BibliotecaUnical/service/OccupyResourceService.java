@@ -3,10 +3,10 @@ package com.Stefan.BibliotecaUnical.service;
 import com.Stefan.BibliotecaUnical.DTO.ChairDTOs.ChairDTO;
 
 import com.Stefan.BibliotecaUnical.DTO.LockerDTOs.LockerDTO;
-import com.Stefan.BibliotecaUnical.event.MapLayoutUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,36 +26,36 @@ public class OccupyResourceService {
     private final LockerService lockerService;
 
     @Transactional
-    public void occupyChair(Long chairId)
-    {
-        log.info("Occupying chair {}", chairId);
-        chairService.occupyChair(chairId);
-        eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
+    public void occupyResource(Long resourceId, String resourceType){
+        if((resourceId == null || resourceId == 0) && resourceType.isBlank())
+        {
+            throw new ResourceNotFoundException("No such resource to occupy");
+        }
+        if(resourceType.equalsIgnoreCase("locker"))
+        {
+            lockerService.occupyLocker(resourceId);
+        }
+        else if (resourceType.equalsIgnoreCase("chair"))
+        {
+            chairService.occupyChair(resourceId);
+        }
     }
 
-    public void occupyLocker(Long lockerId)
-    {
-        log.info("Occupying locker {}", lockerId);
-        lockerService.occupyLocker(lockerId);
-        eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
-    }
-
-
-    public void freeChair(Long chairId)
-    {
-        log.info("Freeing chair with id: {}", chairId);
-        chairService.freeChairFromOccupation(chairId);
-        eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
-    }
-
-
-    public void freeLocker(Long lockerId)
-    {
-        log.info("Freeing locker with id: {}", lockerId);
-        lockerService.freeLockerFromOccupation(lockerId);
-        eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
-    }
-
+/*    @Transactional
+    public void freeResource(Long resourceId, String resourceType){
+        if((resourceId == null || resourceId == 0) && resourceType.isBlank())
+        {
+            throw new ResourceNotFoundException("No such resource to free");
+        }
+        if(resourceType.equalsIgnoreCase("locker"))
+        {
+            lockerService.freeLocker(resourceId);
+        }
+        else if (resourceType.equalsIgnoreCase("chair"))
+        {
+            chairService.freeChair(resourceId);
+        }
+    }*/
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void freeAllChairs()
@@ -67,9 +67,10 @@ public class OccupyResourceService {
         {
             chair.setOccupied(false);
             chair.setOccupiedUntil(null);
+            chair.setReserved(false);
+            chair.setReservationId(null);
             chairService.saveChair(chair);
         }
-        eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
     @Scheduled(cron = "0 0 0 * * ?")
     public void freeAllLockers()
@@ -81,9 +82,10 @@ public class OccupyResourceService {
         {
             locker.setOccupied(false);
             locker.setOccupiedUntil(null);
+            locker.setReserved(false);
+            locker.setReservationId(null);
             lockerService.saveLocker(locker);
         }
-        eventPublisher.publishEvent(new MapLayoutUpdatedEvent(this));
     }
 
 }

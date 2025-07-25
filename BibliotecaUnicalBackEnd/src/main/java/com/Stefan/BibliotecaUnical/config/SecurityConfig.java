@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/shelf/**", "/api/books/**", "/api/reservation/**", "/api/lockers/**", "/api/libraryTable/**", "/api/chairs/**").hasAnyRole("USER","STAFF", "ADMIN")
 
                         //STAFF
-                        .requestMatchers( "/api/mapLayout/**").hasAnyRole("STAFF", "ADMIN")
+/*                        .requestMatchers( "").hasAnyRole("STAFF", "ADMIN")*/
 
                         //ADMIN
                         .requestMatchers("/api/**").hasRole("ADMIN")

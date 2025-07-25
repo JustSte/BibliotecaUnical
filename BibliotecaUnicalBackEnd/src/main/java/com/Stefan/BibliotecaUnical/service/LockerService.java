@@ -7,7 +7,6 @@ import com.Stefan.BibliotecaUnical.repository.LockerRepository;
 import com.Stefan.BibliotecaUnical.request.ModifyLockerRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -79,7 +78,6 @@ public class LockerService {
 
         locker.setReserved(request.isReserved());
         return lockerMapper.toDTO(locker);
-
     }
 
     @Transactional
@@ -96,12 +94,26 @@ public class LockerService {
 
     @Transactional
     @CachePut(value = "locker", key = "#id")
-    public LockerDTO freeLockerFromReservation(Long id)
+    public LockerDTO freeLocker(Long id)
     {
+        if(id == 0)
+        {
+            throw new ResourceNotFoundException("No such locker");
+        }
         Locker locker = lockerMapper.toEntity(getLockerById(id));
-        locker.setReserved(false);
-        locker.setOccupiedUntil(null);
-        locker.setReservationId(null);
+        if(locker.isOccupied() && locker.isReserved())
+        {
+            locker.setReserved(false);
+            locker.setOccupied(false);
+            locker.setOccupiedUntil(null);
+            locker.setReservationId(null);
+        }
+        else if (locker.isReserved())
+        {
+            locker.setReserved(false);
+            locker.setOccupiedUntil(null);
+            locker.setReservationId(null);
+        }
         Locker savedLocker = lockerRepository.save(locker);
         return lockerMapper.toDTO(savedLocker);
     }
@@ -110,29 +122,18 @@ public class LockerService {
     @CachePut(value = "locker", key = "#id")
     public LockerDTO occupyLocker(Long id)
     {
-        Locker locker = lockerRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found."));
-        if(locker.isOccupied())
+        Locker lockerToSave = lockerMapper.toEntity(getLockerById(id));
+        if(lockerToSave.isOccupied())
         {
             throw new IllegalStateException("Resource already occupied!");
         }
-        locker.setOccupied(true);
-        locker.setOccupiedUntil(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES));
-        return lockerMapper.toDTO(locker);
-    }
-
-    @Transactional
-    @CachePut(value = "locker", key = "#id")
-    public LockerDTO freeLockerFromOccupation(Long id)
-    {
-        Locker locker = getLockerFromRepository(id);
-        if(!locker.isOccupied())
+        else if (!lockerToSave.isReserved())
         {
-            throw new IllegalStateException("Locker is not occupied, nothing to free.");
+            throw new IllegalStateException("Resource is not reserved yet.");
         }
-        locker.setOccupied(false);
-        locker.setOccupiedUntil(null);
-        return lockerMapper.toDTO(locker);
+        lockerToSave.setOccupied(true);
+        Locker savedLocker = lockerRepository.save(lockerToSave);
+        return lockerMapper.toDTO(savedLocker);
     }
 
     @Transactional
@@ -148,12 +149,4 @@ public class LockerService {
             throw new RuntimeException("Locker with id: " + id + " not found.");
         }
     }
-
-    private Locker getLockerFromRepository(Long id)
-    {
-        Locker locker = lockerRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Locker with id : " + id + " not found."));
-        return locker;
-    }
-
 }

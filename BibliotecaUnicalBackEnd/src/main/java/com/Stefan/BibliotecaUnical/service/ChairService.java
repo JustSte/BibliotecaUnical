@@ -85,13 +85,27 @@ public class ChairService {
 
     @Transactional
     @CachePut(value="chair", key="#id")
-    public ChairDTO freeChairFromReservation(Long id)
+    public ChairDTO freeChair(Long id)
     {
-        Chair chairToSave = chairMapper.toEntity(getChairById(id));
-        chairToSave.setReserved(false);
-        chairToSave.setOccupiedUntil(null);
-        chairToSave.setReservationId(null);
-        Chair savedChair = chairRepository.save(chairToSave);
+        if(id == 0)
+        {
+            throw new ResourceNotFoundException("No such chair");
+        }
+        Chair chair = chairMapper.toEntity(getChairById(id));
+        if(chair.isOccupied() && chair.isReserved())
+        {
+            chair.setReserved(false);
+            chair.setOccupied(false);
+            chair.setOccupiedUntil(null);
+            chair.setReservationId(null);
+        }
+        else if (chair.isReserved())
+        {
+            chair.setReserved(false);
+            chair.setOccupiedUntil(null);
+            chair.setReservationId(null);
+        }
+        Chair savedChair = chairRepository.save(chair);
         return chairMapper.toDTO(savedChair);
     }
 
@@ -111,31 +125,20 @@ public class ChairService {
     @CachePut(value="chair", key="#id")
     public ChairDTO occupyChair(Long id)
     {
-        log.info("Inside OCCUPYCHAIR, {}", id);
-        Chair chair = chairRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Chair not found"));
-        if(chair.isOccupied())
+        Chair chairToSave = chairMapper.toEntity(getChairById(id));
+        if(chairToSave.isOccupied())
         {
             throw new IllegalStateException("Resource already occupied!");
         }
-        chair.setOccupied(true);
-        chair.setOccupiedUntil(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES));
-        return chairMapper.toDTO(chair);
+        else if (!chairToSave.isReserved())
+        {
+            throw new IllegalStateException("Resource is not reserved yet.");
+        }
+        chairToSave.setOccupied(true);
+        Chair savedChair = chairRepository.save(chairToSave);
+        return chairMapper.toDTO(savedChair);
     }
 
-    @Transactional
-    @CachePut(value="chair", key="#id")
-    public ChairDTO freeChairFromOccupation(Long id)
-    {
-        Chair chair = getChairFromRepository(id);
-        if(!chair.isOccupied())
-        {
-            throw new IllegalStateException("Chair is not occupied, nothing to free.");
-        }
-        chair.setOccupied(false);
-        chair.setOccupiedUntil(null);
-        return chairMapper.toDTO(chair);
-    }
 
     public List<ChairDTO> getAllChairsList()
     {
